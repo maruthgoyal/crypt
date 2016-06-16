@@ -32,7 +32,15 @@ class Engine(object):
         self.userLoginCollection = db[LOGIN_LOG_COLLECTION] # Login logs: Username, Entered Password, Valid login or not, time, IP Address
         self.userLogoutCollection = db[LOGOUT_LOG_COLLECTION] # Logout logs: Username, time, IP Address
         self.ansLogCollection = db[ANS_LOG_COLLECTION] # Answer attempts logs: Username, level #, answer, time, IP Address
-        self.miscCollection = db[MISC_COLLECTION] # Misc data
+        self.miscCollection = db[MISC_COLLECTION] # Misc data. Contains start time and end time, blacklisted IPs
+
+    def isBlacklisted(ip):
+
+        if self.miscCollection.find_one({"_id":ip}):
+
+            return True
+
+        return False
 
     def getTimes(self):
 

@@ -35,6 +35,10 @@ def before_request():
 
         abort(401)
 
+    if eng.isBlacklisted(request.remote_addr):
+
+        abort(403)
+
 
 
 @app.route('/', methods=['POST', 'GET'])
