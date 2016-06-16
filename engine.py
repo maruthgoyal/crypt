@@ -121,11 +121,11 @@ class Engine(object):
                      None: Invalid Login
          '''
 
-        password = hashlib.sha512(password + self.miscCollection.find_one({"_id":"SALT"})['value']).hexdigest()
+        check_password = hashlib.sha512(password + self.miscCollection.find_one({"_id":"SALT"})['value']).hexdigest()
 
         user = self.userCollection.find_one({"username":uname})
 
-        if user and password==user['password']:
+        if user and check_password==user['password']:
 
             self.logLogin(uname, password, True, IPAddress) # Log the attempt
 
