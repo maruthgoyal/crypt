@@ -1,9 +1,20 @@
 from flask import Flask, redirect, url_for, render_template,request, make_response, abort
+
 import time
 from engine import Engine
 
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+
 app = Flask(__name__)
 eng = Engine()
+
+limiter = Limiter(
+        app,
+        key_func=get_remote_address,
+        global_limits=['200/hour']
+
+        )
 
 EXPIRY_DELAY = 7200 # 2 Hours
 
@@ -43,6 +54,7 @@ def before_request():
 
 @app.route('/', methods=['POST', 'GET'])
 @app.route('/<string:message>', methods=['POST', 'GET'])
+@limiter.limit("50/hour")
 def index(message=None):
 
     start, end = eng.getTimes()
@@ -128,7 +140,7 @@ def play():
 
                 answer = request.form['ans'] # Get the answer
 
-                if answer == request.getAnswer(currentLevel): # If the answer is correct
+                if eng.answerIsCorrect(answer, currentLevel): # If the answer is correct
 
                     eng.logAnswer(user_id=request.cookies['user'],
                                   levelNo=currentLevel,

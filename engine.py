@@ -205,3 +205,10 @@ class Engine(object):
         ''' Get answer for given level '''
 
         return self.questionCollection.find_one_and_update({"_id":level}, {"$inc":{"attempts":1}})['answer']
+
+    def answerIsCorrect(self, ans, lvl):
+
+        check_ans = hashlib.sha512(ans + self.miscCollection.find_one({"_id":"SALT"})['value']).hexdigest()
+
+        return (check_ans == self.getAnswer(lvl))
+

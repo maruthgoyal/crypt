@@ -1,0 +1,3 @@
+1. Save answers in HASHED FORM. Use the SALT in the DB and HASHLIB to hash it. VERY IMPORTANT
+2. Save passwords in HASHED FORM. Use the SALT in the DB and HASHLIB to hash it. VERY VERY IMPORTANT
+3. Index User database on _id and username
