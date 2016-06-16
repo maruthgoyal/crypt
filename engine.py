@@ -2,6 +2,7 @@ from constants import *
 
 import pymongo
 import time
+import hashlib
 
 def comp(x, y):
 
@@ -34,7 +35,7 @@ class Engine(object):
         self.ansLogCollection = db[ANS_LOG_COLLECTION] # Answer attempts logs: Username, level #, answer, time, IP Address
         self.miscCollection = db[MISC_COLLECTION] # Misc data. Contains start time and end time, blacklisted IPs
 
-    def isBlacklisted(ip):
+    def isBlacklisted(self, ip):
 
         if self.miscCollection.find_one({"_id":ip}):
 
@@ -120,17 +121,17 @@ class Engine(object):
                      None: Invalid Login
          '''
 
-        user = self.userCollection.find_one({"username":uname, "password":password})
+        password = hashlib.sha512(password + self.miscCollection.find_one({"_id":"SALT"})['value']).hexdigest()
 
-        if user:
+        user = self.userCollection.find_one({"username":uname})
+
+        if user and password==user['password']:
 
             self.logLogin(uname, password, True, IPAddress) # Log the attempt
 
             if user['disqualified']: # User is disqualified
 
                 return "DQ"
-
-            #self.userCollection.find_one_and_update({"username":uname}, {"$set":{"loggedIn":True}})
 
             return user['_id'] # Valid login
 
