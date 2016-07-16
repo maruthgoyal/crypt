@@ -1,0 +1,24 @@
+<HTML>
+
+  <head>
+    <title>Remove User</title>
+  </head>
+
+  <body>
+
+    <H1>Remove User</H1>
+    <form method="POST" action="{{url_for('remove_user')}}">
+      username of user to remove:
+      <input type="text" placeholder="username" name="username"/>
+
+      Your password:
+      <input type="password" name="adminPass" />
+      <input type="submit" />
+    </form>
+
+  {% if error %}
+    <H1>ERROR: Invalid Login. Try again.</H1>
+  {%endif%}
+  </body>
+
+</HTML>

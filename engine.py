@@ -2,7 +2,11 @@ from constants import *
 
 import pymongo
 import time
+import random
+import string
 import hashlib
+import smtplib
+
 
 def comp(x, y):
 
@@ -15,7 +19,6 @@ def comp(x, y):
         return y[1] - x[1]
 
 
-
 class Engine(object):
 
     ''' Engine of the app.'''
@@ -24,8 +27,8 @@ class Engine(object):
 
         ''' Initialize all Database connections'''
 
-        connection = pymongo.MongoClient(MONGODB_SERVER, MONGODB_PORT)
-        connection["admin"].authenticate(USER, PASSWORD, mechanism="SCRAM-SHA-1")
+        self.connection = pymongo.MongoClient(MONGODB_SERVER, MONGODB_PORT)
+        self.connection["admin"].authenticate(USER, PASSWORD, mechanism="SCRAM-SHA-1")
         db = connection[MONGO_DB]
 
         self.userCollection = db[USER_COLLECTION]     # User credentials: Username, Password, ID, current Level, list of level completion times, last completed time, dq or not, logged in or not
@@ -34,6 +37,39 @@ class Engine(object):
         self.userLogoutCollection = db[LOGOUT_LOG_COLLECTION] # Logout logs: Username, time, IP Address
         self.ansLogCollection = db[ANS_LOG_COLLECTION] # Answer attempts logs: Username, level #, answer, time, IP Address
         self.miscCollection = db[MISC_COLLECTION] # Misc data. Contains start time and end time, blacklisted IPs
+
+        self.adminCollection = db[ADMIN_COLLECTION]
+        self.adminLoginCollection = db[ADMIN_LOGIN_COLLECTION]
+        self.adminLogoutCollection = db[ADMIN_LOGOUT_COLLECTION]
+
+
+        # Initialize email stuff
+        self.server = smtplib.SMTP(EMAIL_HOST)
+        self.server.starttls()
+        self.server.ehlo()
+        self.server.login(EMAIL_USERNAME, EMAIL_PASSWORD)
+
+    def __del__(self):
+        self.connection.close()
+        self.server.close()
+
+
+    def send_email(self, to_addr, subject, message):
+
+        ''' Send an email
+
+            NOTE: DO NOT FORGET: Let less secure apps access the email ID
+
+        '''
+
+        from_string = "From: %s" % FROM_EMAIL_ID
+        to_string = "To: %s" % to_addr
+        subject_string = "Subject: %s" % subject
+
+        msg = '\r\n'.join([from_string, to_string, subject_string, "", message])
+
+        self.server.sendmail(FROM_EMAIL_ID, to_addr, msg)
+
 
     def isBlacklisted(self, ip):
 
@@ -125,7 +161,7 @@ class Engine(object):
 
         user = self.userCollection.find_one({"username":uname})
 
-        if user and check_password==user['password']:
+        if user and (check_password==user['password']):
 
             self.logLogin(uname, password, True, IPAddress) # Log the attempt
 
@@ -144,10 +180,6 @@ class Engine(object):
         return (self.userCollection.find_one({"_id":user_id})['disqualified'])
 
     def logout(self, user_id, IP):
-
-        # TODO: REVIEW THIS
-
-        #uname = self.userCollection.find_one_and_update({"_id":user_id}, {"$set":{"loggedIn":False}})['username']  # Set Logged In to False and get username
 
         uname = self.userCollection.find_one({"_id":user_id})['username']
         self.logLogout(uname, IP)
@@ -198,7 +230,13 @@ class Engine(object):
 
         ''' Get question for given level '''
 
-        return self.questionCollection.find_one({"_id":level})['question']
+        maxLevel = self.miscCollection.find_one({"_id":"maxLevel"})['value']
+
+        if level <= maxLevel:
+
+            return self.questionCollection.find_one({"_id":level})['question']
+
+        return None
 
     def getAnswer(self, level):
 
@@ -208,7 +246,96 @@ class Engine(object):
 
     def answerIsCorrect(self, ans, lvl):
 
+        ans = ans.lower().strip()
+
         check_ans = hashlib.sha512(ans + self.miscCollection.find_one({"_id":"SALT"})['value']).hexdigest()
 
         return (check_ans == self.getAnswer(lvl))
 
+
+
+    #############################
+    ######## ADMIN STUFF #########
+    #############################
+
+    def logAdminLogin(self, uname, password, valid, IP):
+
+        self.adminLoginCollection.insert_one({"username":uname,
+                                            "password":password,
+                                            "time":time.time(),
+                                            "valid":valid,
+                                            "IPAddress":IP})
+
+    def logAdminLogout(self, uname, IP):
+
+        self.adminLogoutCollection.insert_one({"username":uname,
+                                            "IPAddress":IP,
+                                            "time":time.time()})
+
+    def adminIsLoggedIn(self, adminID):
+
+        return self.adminCollection.find_one({"_id":adminID})['isLoggedIn']
+
+    def loginAdmin(self, username, password, ip):
+
+        check_password = hashlib.sha512(password + self.miscCollection.find_one({"_id":"SALT"})['value']).hexdigest()
+
+        admin = self.adminCollection.find_one({"username":username})
+
+        if admin and (check_password==admin['password']):
+
+            self.logAdminLogin(username, password, True, ip)
+
+            return admin['_id']
+
+        self.logAdminLogin(username, password, False, ip)
+        return None
+
+    def checkAdminLogin(self, admin_id, password):
+
+        ''' Looks up admin by ID. Returns True if password matches the admin's password.'''
+
+        check_password = hashlib.sha512(password + self.miscCollection.find_one({"_id":"SALT"})['value']).hexdigest()
+        admin = self.adminCollection.find_one({"_id":admin_id})
+
+        return (admin and check_password==admin['password'])
+
+    def logoutAdmin(self, admin_id, ip):
+
+        uname = self.adminCollection.find_one({"_id":admin_id})['username']
+        self.logAdminLogout(uname, ip)
+
+
+    def add_user(self, email, password, username, schoolName):
+
+        # Generate random ID for the user. (length 32 string)
+        # Hash the password and store it.
+        # Add user with _id, username, password, email, currentLevel, lastLevelTime, NAME (schoolName), disqualified, answerTimes=[]
+
+        _id = ''.join(random.SystemRandom().choice(string.ascii_letters + string.digits) for _ in range(32))
+        hashed_password = hashlib.sha512(password + self.miscCollection.find_one({"_id":"SALT"})['value']).hexdigest()
+
+        self.userCollection.insert_one({'_id':_id,
+                                        'username':username,
+                                        'password':hashed_password,
+                                        'email':email,
+                                        'currentLevel':0,
+                                        'lastLevelTime':0.0,
+                                        'NAME':schoolName,
+                                        'disqualified': False,
+                                        'answerTimes':[]})
+
+        email_message = REGISTRATION_MSG + '\r\n' + 'username: ' + username + '\r\n' + "password: " + password
+        self.send_email(to_addr=email, subject=SUBJECT_MSG, message=email_message)
+
+    def remove_user(self, username):
+
+        ''' Deletes the user with the matching username '''
+
+        self.userCollection.delete_one({"username":username})
+
+    def dq_user(self, username):
+
+        ''' Disqualifies the user with the matching username '''
+
+        self.userCollection.update_one({"username":username}, {"$set":{"disqualified":True}, "$set":{"currentLevel":-1}})

@@ -1,0 +1,31 @@
+<HTML>
+
+  <HEAD>
+    <TITLE> Dashboard </TITLE>
+  </HEAD>
+
+  <BODY>
+
+      <form method="GET" action="{{url_for('adminLogout')}}">
+          <button>logout</button>
+      </form>
+
+      <br />
+      <br />
+
+      <form method="GET" action="{{url_for('add_user')}}">
+        <button>Add User</button>
+      </form>
+
+      <br />
+      <br />
+
+      <form method="GET" action="{{url_for('remove_user')}}">
+        <button>Remove User</button>
+      </form>
+
+      <form method="GET" action="{{url_for('dq_user')}}">
+        <button>DQ User</button>
+      </form>
+  </BODY>
+</HTML>

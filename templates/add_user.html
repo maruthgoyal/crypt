@@ -1,0 +1,26 @@
+<HTML>
+
+  <head>
+    <title>Add User</title>
+  </head>
+
+  <body>
+
+    <H1>Add User</H1>
+    <form method="POST" action="{{url_for('add_user')}}">
+      <input type="email" placeholder="email" name="emailID"/> <br />
+      <input type="text" placeholder="password" name="password" /> <br />
+      <input type="text" placeholder="username" name="username" /> <br />
+      <input type="text" placeholder="School Name" name="name" /> <br />
+
+      Your password:
+      <input type="password" name="adminPass" /> <br />
+      <input type="submit"  />
+    </form>
+
+    {% if error %}
+      <H1>ERROR. Invalid Login. Try again</H1>
+    {%endif%}
+  </body>
+
+</HTML>

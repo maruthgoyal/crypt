@@ -1,1 +1,15 @@
-{{q | safe}}
+{% if q %}
+  {{q | safe}}
+
+{% else %}
+  <HTML>
+    <BODY>
+      <H1>You've completed the hunt!</H1>
+    </BODY>
+  </HTML>
+
+{%endif%}
+
+
+{#All questions must accept 2 params. q, the HTML question, and wrongAnswer, a boolean indicating that the entered answer is incorect.#}
+{#They must also implement a logout button, rith the action being {{url_for('logout')}}#}
