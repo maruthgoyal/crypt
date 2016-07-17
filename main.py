@@ -70,14 +70,14 @@ def before_request():
 
 
 @app.route('/', methods=['POST', 'GET'])
-@app.route('/<string:message>', methods=['POST', 'GET'])
 @limiter.limit("50/hour") # Not more than 50 visits to the main page per hour
-def index(message=None):
+def index():
 
     start, end = eng.getTimes()
     currentTime = time.time()
 
-    print currentTime, start, end
+    #print currentTime, start, end
+    # print request.access_route, request.environ['REMOTE_ADDR']
 
     if currentTime >= start and currentTime < end:
 
@@ -87,7 +87,7 @@ def index(message=None):
 
                 return redirect(url_for('play')) # If so, go straight to the play page. Yay.
 
-            return render_template('index.html', error=False, mess=message) # Otherwise, go to Login.
+            return render_template('index.html', error=False) # Otherwise, go to Login.
 
         else:
 
@@ -110,7 +110,7 @@ def index(message=None):
 
                     return resp
 
-            return render_template('index.html', error=True, mess=message) # The login was invalid
+            return render_template('index.html', error=True) # The login was invalid
 
     elif currentTime > end:
 
@@ -144,7 +144,7 @@ def play():
         else:
 
             currentLevel = eng.getLevel(request.cookies['user']) # Get the current level
-            question = eng.getQuestion(currentLevel) # Get the question for that level
+            question = eng.getQuestion(currentLevel).replace('\\', '') # Get the question for that level
 
             if request.method == 'GET': # show the question
 
@@ -190,7 +190,7 @@ def play():
 @app.route('/leaderboard')
 def leaderboard():
 
-    leaderList = eng.getLeaderboard()
+    leaderList = eng.getLeaderBoard()
 
     return render_template("leaderboard.html", leaders=leaderList)
 
@@ -198,14 +198,14 @@ def leaderboard():
 
 
 
-@app.route('/logout', methods=['POST'])
+@app.route('/logout')
 def logout():
 
     if 'user' in request.cookies:
 
         eng.logout(request.cookies['user'], request.environ['REMOTE_ADDR']) # Logout the user. Sending the IP for logging purposes
 
-        resp = make_response(redirect(url_for('index', message="Either you have logged out, or your session has expired."))) # Send to the index page.
+        resp = make_response(redirect(url_for('index'))) # Send to the index page.
         resp.set_cookie('user', value='', expires=0) # Remove the cookie
 
         return resp
@@ -235,7 +235,7 @@ def dead():
 ###### Admin Stuff ###########
 ##############################
 
-@app.route('/5/7/69/whoami/admin', methods=['POST', 'GET'])
+@app.route('/5/7/whoami/admin', methods=['POST', 'GET'])
 def admin():
 
     if request.method == 'GET':
@@ -351,13 +351,37 @@ def dq_user():
 
         return redirect(url_for('admin_dash'))
 
+@app.route('/5/7/whoami/admin/rq', methods=['POST', 'GET'])
+def rq_user():
+
+    if 'admin' not in request.cookies:
+        return redirect(url_for('admin'))
+
+    if request.method == 'GET':
+
+        return render_template("rq_user.html", error=False)
+
+    else:
+
+        uname = request.form['username']
+        adminPass = request.form['adminPass']
+
+        if eng.checkAdminLogin(request.cookies['admin'], adminPass):
+
+            eng.rq_user(uname)
+
+        else:
+            return render_template("rq_user.html", error=True)
+
+        return redirect(url_for('admin_dash'))
+
 
 @app.route('/5/7/whoami/admin/logout')
 def adminLogout():
 
     if "admin" in request.cookies:
 
-        self.adminLogout(request.cookies['admin'], request.environ['REMOTE_ADDR'])
+        eng.logoutAdmin(request.cookies['admin'], request.environ['REMOTE_ADDR'])
 
         resp =make_response(redirect(url_for("admin")))
         resp.set_cookie("admin", 0,expires=0)
@@ -368,4 +392,4 @@ def adminLogout():
 
 if __name__ == '__main__':
 
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0')

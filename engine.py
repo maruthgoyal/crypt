@@ -29,7 +29,7 @@ class Engine(object):
 
         self.connection = pymongo.MongoClient(MONGODB_SERVER, MONGODB_PORT)
         self.connection["admin"].authenticate(USER, PASSWORD, mechanism="SCRAM-SHA-1")
-        db = connection[MONGO_DB]
+        db = self.connection[MONGO_DB]
 
         self.userCollection = db[USER_COLLECTION]     # User credentials: Username, Password, ID, current Level, list of level completion times, last completed time, dq or not, logged in or not
         self.questionCollection = db[QUESTIONS_COLLECTION] # Levels: Level#, Question (HTML String), Answer
@@ -43,7 +43,7 @@ class Engine(object):
         self.adminLogoutCollection = db[ADMIN_LOGOUT_COLLECTION]
 
 
-        # Initialize email stuff
+        #Initialize email stuff
         self.server = smtplib.SMTP(EMAIL_HOST)
         self.server.starttls()
         self.server.ehlo()
@@ -51,7 +51,7 @@ class Engine(object):
 
     def __del__(self):
         self.connection.close()
-        self.server.close()
+        # self.server.close()
 
 
     def send_email(self, to_addr, subject, message):
@@ -157,7 +157,7 @@ class Engine(object):
                      None: Invalid Login
          '''
 
-        check_password = hashlib.sha512(password + self.miscCollection.find_one({"_id":"SALT"})['value']).hexdigest()
+        check_password = hashlib.sha512(password + SALT).hexdigest()
 
         user = self.userCollection.find_one({"username":uname})
 
@@ -210,13 +210,13 @@ class Engine(object):
 
         tempList = []
 
-        for user in self.userCollection.find():
+        for user in self.userCollection.find({"disqualified":False}):
 
             tempList.append((user['currentLevel'], user['lastLevelTime'], user['NAME']))
 
         tempList.sort(reverse=True, cmp=comp)
 
-        return [(x[2], x[0]) for x in tempList]
+        return [[str(x[2]), x[0]] for x in tempList]
 
 
 
@@ -248,7 +248,7 @@ class Engine(object):
 
         ans = ans.lower().strip()
 
-        check_ans = hashlib.sha512(ans + self.miscCollection.find_one({"_id":"SALT"})['value']).hexdigest()
+        check_ans = hashlib.sha512(ans + SALT).hexdigest()
 
         return (check_ans == self.getAnswer(lvl))
 
@@ -278,7 +278,7 @@ class Engine(object):
 
     def loginAdmin(self, username, password, ip):
 
-        check_password = hashlib.sha512(password + self.miscCollection.find_one({"_id":"SALT"})['value']).hexdigest()
+        check_password = hashlib.sha512(password + SALT).hexdigest()
 
         admin = self.adminCollection.find_one({"username":username})
 
@@ -291,11 +291,15 @@ class Engine(object):
         self.logAdminLogin(username, password, False, ip)
         return None
 
+    def logoutAdmin(self, admin_id, ip):
+        name = self.adminCollection.find_one_and_update({"_id":admin_id}, {"$set":{"isLoggedIn":False}})['username']
+        self.logAdminLogout(name, ip)
+
     def checkAdminLogin(self, admin_id, password):
 
         ''' Looks up admin by ID. Returns True if password matches the admin's password.'''
 
-        check_password = hashlib.sha512(password + self.miscCollection.find_one({"_id":"SALT"})['value']).hexdigest()
+        check_password = hashlib.sha512(password + SALT).hexdigest()
         admin = self.adminCollection.find_one({"_id":admin_id})
 
         return (admin and check_password==admin['password'])
@@ -313,7 +317,7 @@ class Engine(object):
         # Add user with _id, username, password, email, currentLevel, lastLevelTime, NAME (schoolName), disqualified, answerTimes=[]
 
         _id = ''.join(random.SystemRandom().choice(string.ascii_letters + string.digits) for _ in range(32))
-        hashed_password = hashlib.sha512(password + self.miscCollection.find_one({"_id":"SALT"})['value']).hexdigest()
+        hashed_password = hashlib.sha512(password + SALT).hexdigest()
 
         self.userCollection.insert_one({'_id':_id,
                                         'username':username,
@@ -338,4 +342,10 @@ class Engine(object):
 
         ''' Disqualifies the user with the matching username '''
 
-        self.userCollection.update_one({"username":username}, {"$set":{"disqualified":True}, "$set":{"currentLevel":-1}})
+        self.userCollection.update_one({"username":username}, {"$set":{"disqualified":True}})
+
+    def rq_user(self, username):
+
+        ''' Requalifies the user with the matching username '''
+
+        self.userCollection.update_one({"username":username}, {"$set":{"disqualified":False}})

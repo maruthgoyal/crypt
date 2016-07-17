@@ -1,0 +1,17 @@
+<HTML>
+    <HEAD>
+        <TITLE> Disqualify User </TITLE>
+    </HEAD>
+
+    <BODY>
+        <form method="POST" action="{{url_for('dq_user')}}">
+            Username of user to DQ:
+            <input type="text" name="username" /> <br>
+
+            Your password:
+            <input type="password" name="adminPass" />
+
+            <input type="submit" />
+        </form>
+    </BODY>
+</HTML>

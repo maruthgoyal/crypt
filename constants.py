@@ -18,9 +18,11 @@ PASSWORD = "oR5VGlltFFiepyFi0FNtn8SWF7wYqH0og7ewHlQFrHcrdFP2O8xZ5MSimw8T9b6L"
 
 
 EMAIL_HOST = 'smtp.gmail.com:587'
-FROM_EMAIL_ID = "foobar@lol.com"
-EMAIL_USERNAME = "foobar"
-EMAIL_PASSWORD = "lol"
+FROM_EMAIL_ID = "espicev13@gmail.com"
+EMAIL_USERNAME = "espicev13"
+EMAIL_PASSWORD = "thisisnoida"
 
 REGISTRATION_MSG = """ """
 SUBJECT_MSG = ''
+
+SALT = "9808412005564c13bd85fa92356dd48d"

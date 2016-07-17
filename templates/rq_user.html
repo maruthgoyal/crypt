@@ -1,0 +1,17 @@
+<HTML>
+    <HEAD>
+        <TITLE> Requalify User </TITLE>
+    </HEAD>
+
+    <BODY>
+        <form method="POST" action="{{url_for('rq_user')}}">
+            Username of user to RQ:
+            <input type="text" name="username" /> <br>
+
+            Your password:
+            <input type="password" name="adminPass" />
+
+            <input type="submit" />
+        </form>
+    </BODY>
+</HTML>
