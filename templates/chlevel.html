@@ -1,12 +1,15 @@
 <HTML>
     <HEAD>
-        <TITLE> Requalify User </TITLE>
+        <TITLE> Increment Level  </TITLE>
     </HEAD>
 
     <BODY>
-        <form method="POST" action="{{url_for('rq_user')}}">
-            Username of user to RQ:
+        <form method="POST" action="{{url_for('chlvl')}}">
+            Username of user to increment the level of:
             <input type="text" name="username" /> <br>
+
+            The amount to increment:
+            <input type="number" name="increment" /> <br>
 
             Your password:
             <input type="password" name="adminPass" />

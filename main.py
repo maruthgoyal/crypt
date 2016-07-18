@@ -375,6 +375,32 @@ def rq_user():
 
         return redirect(url_for('admin_dash'))
 
+@app.route('/5/7/whoami/admin/chlvl')
+def chlvl():
+
+    if 'admin' not in request.cookies:
+        return redirect(url_for('admin'))
+
+    if request.method == 'GET':
+
+        return render_template("chlevel.html", error=False)
+
+    else:
+
+        uname = request.form['username']
+        increment = request.form['increment']
+        adminPass = request.form['adminPass']
+
+        if eng.checkAdminLogin(request.cookies['admin'], adminPass):
+
+            eng.increment_level(uname, increment)
+
+        else:
+            return render_template("chlevel.html", error=True)
+
+        return redirect(url_for('admin_dash'))
+
+
 
 @app.route('/5/7/whoami/admin/logout')
 def adminLogout():

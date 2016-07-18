@@ -304,11 +304,6 @@ class Engine(object):
 
         return (admin and check_password==admin['password'])
 
-    def logoutAdmin(self, admin_id, ip):
-
-        uname = self.adminCollection.find_one({"_id":admin_id})['username']
-        self.logAdminLogout(uname, ip)
-
 
     def add_user(self, email, password, username, schoolName):
 
@@ -349,3 +344,9 @@ class Engine(object):
         ''' Requalifies the user with the matching username '''
 
         self.userCollection.update_one({"username":username}, {"$set":{"disqualified":False}})
+
+    def increment_level(self, username, increment):
+
+        ''' Increments the level of the user by a given value '''
+
+        self.userCollection.update_one({"username":username}, {"inc":{"currentLevel":increment}})
