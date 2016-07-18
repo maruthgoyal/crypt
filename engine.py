@@ -244,15 +244,23 @@ class Engine(object):
 
         return self.questionCollection.find_one_and_update({"_id":level}, {"$inc":{"attempts":1}})['answer']
 
-    def answerIsCorrect(self, ans, lvl):
 
-        ans = ans.lower().strip()
+    def setTeam(self, user_id, team):
 
-        check_ans = hashlib.sha512(ans + SALT).hexdigest()
-
-        return (check_ans == self.getAnswer(lvl))
+        self.userCollection.update_one({"_id":user_id}, {"$set":{"team":team}})
 
 
+    def answerIsCorrect(self, ans, lvl, user_id):
+
+        if lvl > -1:
+            ans = ans.lower().strip()
+            check_ans = hashlib.sha512(ans + SALT).hexdigest()
+
+            return (check_ans == self.getAnswer(lvl))
+
+        else:
+            self.setTeam(user_id, int(ans))
+            return True
 
     #############################
     ######## ADMIN STUFF #########
@@ -349,4 +357,6 @@ class Engine(object):
 
         ''' Increments the level of the user by a given value '''
 
-        self.userCollection.update_one({"username":username}, {"inc":{"currentLevel":increment}})
+        if self.userCollection.find_one({"username":username})['team'] == MYSTIC:
+
+            self.userCollection.update_one({"username":username}, {"inc":{"currentLevel":increment}})

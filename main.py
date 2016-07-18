@@ -6,6 +6,8 @@ from engine import Engine # Where all the magic happens
 from flask_limiter import Limiter  # For Rate limiting
 from flask_limiter.util import get_remote_address
 
+from constants import VALOR, INSTINCT, MYSTIC
+
 app = Flask(__name__)
 eng = Engine() # Initialize our engine
 
@@ -79,46 +81,36 @@ def index():
     #print currentTime, start, end
     # print request.access_route, request.environ['REMOTE_ADDR']
 
-    if currentTime >= start and currentTime < end:
+    if request.method == 'GET':
 
-        if request.method == 'GET':
+        if "user" in request.cookies:  # Check if user is already logged in
 
-            if "user" in request.cookies:  # Check if user is already logged in
+            return redirect(url_for('play')) # If so, go straight to the play page. Yay.
 
-                return redirect(url_for('play')) # If so, go straight to the play page. Yay.
-
-            return render_template('index.html', error=False) # Otherwise, go to Login.
-
-        else:
-
-            uname = request.form['username']
-            password = request.form['password']
-            ip = request.environ['REMOTE_ADDR'] # IP Address of the user. For logging and blacklist purposes
-
-            if uname and password:
-
-                id_of_user = eng.authenticate(uname, password, ip) # Log and verify the login attempt
-
-                if id_of_user: # If the login was valid
-
-                    if id_of_user == 'DQ': # If the user is disqualified
-
-                        return redirect(url_for('dead')) # Send them to the dead page
-
-                    resp = make_response(redirect(url_for('play'))) # Otherwise, send them to play
-                    resp.set_cookie('user', id_of_user, expires=(time.time() + EXPIRY_DELAY)) # Set the cookie and expiry
-
-                    return resp
-
-            return render_template('index.html', error=True) # The login was invalid
-
-    elif currentTime > end:
-
-        return render_template("finished.html") # Event is over.
+        return render_template('index.html', error=False) # Otherwise, go to Login.
 
     else:
 
-        return render_template("notstarted.html") # Event hasn't started.
+        uname = request.form['username']
+        password = request.form['password']
+        ip = request.environ['REMOTE_ADDR'] # IP Address of the user. For logging and blacklist purposes
+
+        if uname and password:
+
+            id_of_user = eng.authenticate(uname, password, ip) # Log and verify the login attempt
+
+            if id_of_user: # If the login was valid
+
+                if id_of_user == 'DQ': # If the user is disqualified
+
+                    return redirect(url_for('dead')) # Send them to the dead page
+
+                resp = make_response(redirect(url_for('play'))) # Otherwise, send them to play
+                resp.set_cookie('user', id_of_user, expires=(time.time() + EXPIRY_DELAY)) # Set the cookie and expiry
+
+                return resp
+
+        return render_template('index.html', error=True) # The login was invalid
 
 
 
@@ -131,11 +123,13 @@ def play():
     start, end = eng.getTimes()
     currentTime = time.time()
 
-    if currentTime >= start and currentTime < end:
+    if 'user' not in request.cookies: # User is not logged in. Gavar.
 
-        if 'user' not in request.cookies: # User is not logged in. Gavar.
+        return redirect(url_for('index'))
 
-            return redirect(url_for('index'))
+    eligibleForTimeExtension = (eng.getTeam(request.cookies['user']) == VALOR) and ((currentTime - end) < TIME_BONUS)
+
+    if currentTime >= start and (currentTime < end or eligibleForTimeExtension):
 
         elif eng.isDQd(request.cookies['user']):
 
@@ -154,7 +148,7 @@ def play():
 
                 answer = request.form['ans'] # Get the answer
 
-                if eng.answerIsCorrect(answer, currentLevel): # If the answer is correct
+                if eng.answerIsCorrect(answer, currentLevel, request.cookies['user']): # If the answer is correct
 
                     eng.logAnswer(user_id=request.cookies['user'],
                                   levelNo=currentLevel,
