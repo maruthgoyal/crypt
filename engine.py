@@ -51,7 +51,7 @@ class Engine(object):
 
     def __del__(self):
         self.connection.close()
-        # self.server.close()
+        self.server.close()
 
 
     def send_email(self, to_addr, subject, message):
@@ -144,6 +144,26 @@ class Engine(object):
                                         "valid":valid,
                                         "IP":IP})
 
+    def getSecret(self, user_id):
+
+        user = self.userCollection.find_one({"_id":user_id})
+
+        if user:
+            return user['secret']
+
+        return None
+
+
+    def authenticate_secret(self, user_id, secret):
+
+        user = self.userCollection.find_one({"_id":user_id})
+
+        if user:
+            return secret==user['secret']
+
+        return False
+
+
     def authenticate(self, uname, password, IPAddress):
 
         ''' Authenticate the user
@@ -175,20 +195,29 @@ class Engine(object):
 
         return None # Invalid login
 
+
+
     def isDQd(self, user_id):
 
         return (self.userCollection.find_one({"_id":user_id})['disqualified'])
+
+
 
     def logout(self, user_id, IP):
 
         uname = self.userCollection.find_one({"_id":user_id})['username']
         self.logLogout(uname, IP)
 
+
+
+
     def isLoggedIn(self, user_id):
 
         # TODO: REVIEW THIS
 
         return (self.userCollection.find_one({"_id":user_id})['loggedIn'])
+
+
 
 
     def incrementLevel(self, user_id):
@@ -198,6 +227,8 @@ class Engine(object):
         self.userCollection.find_one_and_update({"_id":user_id},
                                                 {"$inc" : {"currentLevel" : 1}})
 
+
+
     def setLastAnswerTime(self, user_id, time):
 
         ''' Set the time of the last answered question '''
@@ -205,6 +236,8 @@ class Engine(object):
         self.userCollection.find_one_and_update({"_id":user_id},
                                                 {"$set" : {"lastLevelTime":time},
                                                 "$push" :{"answerTimes":time}})
+
+
 
     def getLeaderBoard(self):
 
@@ -220,11 +253,15 @@ class Engine(object):
 
 
 
+
     def getLevel(self, user_id):
 
         ''' Get current level of the user '''
 
         return self.userCollection.find_one({"_id":user_id})['currentLevel']
+
+
+
 
     def getQuestion(self, level):
 
@@ -238,6 +275,9 @@ class Engine(object):
 
         return None
 
+
+
+
     def getAnswer(self, level):
 
         ''' Get answer for given level '''
@@ -245,10 +285,15 @@ class Engine(object):
         return self.questionCollection.find_one_and_update({"_id":level}, {"$inc":{"attempts":1}})['answer']
 
 
+
+
     def setTeam(self, user_id, team):
 
         self.userCollection.update_one({"_id":user_id}, {"$set":{"team":team}})
 
+    def getTeam(self, user_id):
+
+        return self.userCollection.find_one({"_id":user_id})['team']
 
     def answerIsCorrect(self, ans, lvl, user_id):
 
@@ -262,9 +307,21 @@ class Engine(object):
             self.setTeam(user_id, int(ans))
             return True
 
-    #############################
-    ######## ADMIN STUFF #########
-    #############################
+
+
+
+    ##################################################################################################
+    ##################################################################################################
+    ##################################################################################################
+    ##################################################################################################
+    ##################################################################################################
+    ##################################################################################################
+    ##################################################################################################
+    ##################################################################################################
+
+    ##############################
+    ###### Admin Stuff ###########
+    ##############################
 
     def logAdminLogin(self, uname, password, valid, IP):
 
@@ -283,6 +340,19 @@ class Engine(object):
     def adminIsLoggedIn(self, adminID):
 
         return self.adminCollection.find_one({"_id":adminID})['isLoggedIn']
+
+    def getAdminSecret(self, admin_name):
+
+        return self.adminCollection.find_one({"username":admin_name})['secret']
+
+    def authenticate_admin_secret(self, admin_id, secret):
+
+        admin = self.adminCollection.find_one({"_id":admin_id})
+
+        if admin:
+            return secret==admin['secret']
+
+        return False
 
     def loginAdmin(self, username, password, ip):
 
@@ -321,15 +391,18 @@ class Engine(object):
 
         _id = ''.join(random.SystemRandom().choice(string.ascii_letters + string.digits) for _ in range(32))
         hashed_password = hashlib.sha512(password + SALT).hexdigest()
+        secret = hashlib.sha512(_id + SALT).hexdigest()
 
         self.userCollection.insert_one({'_id':_id,
                                         'username':username,
                                         'password':hashed_password,
                                         'email':email,
-                                        'currentLevel':0,
+                                        'currentLevel':-1,
                                         'lastLevelTime':0.0,
                                         'NAME':schoolName,
                                         'disqualified': False,
+                                        'secret': secret,
+                                        'team': -1,
                                         'answerTimes':[]})
 
         email_message = REGISTRATION_MSG + '\r\n' + 'username: ' + username + '\r\n' + "password: " + password
@@ -357,6 +430,8 @@ class Engine(object):
 
         ''' Increments the level of the user by a given value '''
 
-        if self.userCollection.find_one({"username":username})['team'] == MYSTIC:
+        user = self.userCollection.find_one({"username":username})
+
+        if user and user['team'] == MYSTIC:
 
             self.userCollection.update_one({"username":username}, {"inc":{"currentLevel":increment}})

@@ -27,7 +27,7 @@ SUBJECT_MSG = ''
 
 SALT = "9808412005564c13bd85fa92356dd48d"
 
-TIME_DELTA = (30 * 60) # 30 Minutes
+TIME_BONUS = (30 * 60) # 30 Minutes
 
 VALOR = 0
 MYSTIC = 1

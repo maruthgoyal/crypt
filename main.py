@@ -6,12 +6,16 @@ from engine import Engine # Where all the magic happens
 from flask_limiter import Limiter  # For Rate limiting
 from flask_limiter.util import get_remote_address
 
-from constants import VALOR, INSTINCT, MYSTIC
+from constants import VALOR, INSTINCT, MYSTIC, TIME_BONUS
 
 app = Flask(__name__)
 eng = Engine() # Initialize our engine
 
+USER_COOKIE_NAME = "user"
+ADMIN_COOKIE_NAME = "admin"
 
+USER_SECRET_NAME = "user_secret"
+ADMIN_SECRET_NAME = "admin_secret"
 
 limiter = Limiter(
         app,
@@ -83,7 +87,7 @@ def index():
 
     if request.method == 'GET':
 
-        if "user" in request.cookies:  # Check if user is already logged in
+        if USER_COOKIE_NAME in request.cookies and USER_SECRET_NAME in request.cookies:  # Check if user is already logged in
 
             return redirect(url_for('play')) # If so, go straight to the play page. Yay.
 
@@ -106,7 +110,8 @@ def index():
                     return redirect(url_for('dead')) # Send them to the dead page
 
                 resp = make_response(redirect(url_for('play'))) # Otherwise, send them to play
-                resp.set_cookie('user', id_of_user, expires=(time.time() + EXPIRY_DELAY)) # Set the cookie and expiry
+                resp.set_cookie(USER_COOKIE_NAME, id_of_user, expires=(time.time() + EXPIRY_DELAY)) # Set the cookie and expiry
+                resp.set_cookie(USER_SECRET_NAME, eng.getSecret(id_of_user), expires=(time.time() + EXPIRY_DELAY)) # Set the secret and expiry
 
                 return resp
 
@@ -123,21 +128,42 @@ def play():
     start, end = eng.getTimes()
     currentTime = time.time()
 
-    if 'user' not in request.cookies: # User is not logged in. Gavar.
+    if USER_COOKIE_NAME not in request.cookies or USER_SECRET_NAME not in request.cookies: # User is not logged in. Gavar.
 
-        return redirect(url_for('index'))
+        resp = make_response(redirect(url_for('index')))
+        resp.set_cookie(USER_COOKIE_NAME, '', expires=0)
+        resp.set_cookie(USER_SECRET_NAME, '', expires=0)
 
-    eligibleForTimeExtension = (eng.getTeam(request.cookies['user']) == VALOR) and ((currentTime - end) < TIME_BONUS)
+        return resp
+
+
+
+    cookie = request.cookies[USER_COOKIE_NAME]
+    secret = request.cookies[USER_SECRET_NAME]
+
+
+
+
+    if not eng.authenticate_secret(cookie, secret):
+
+        resp = make_response(redirect(url_for('index')))
+        resp.set_cookie(USER_COOKIE_NAME, '', expires=0)
+        resp.set_cookie(USER_SECRET_NAME, '', expires=0)
+
+        return resp
+
+
+    eligibleForTimeExtension = (eng.getTeam(cookie) == VALOR) and ((currentTime - end) < TIME_BONUS)
 
     if currentTime >= start and (currentTime < end or eligibleForTimeExtension):
 
-        elif eng.isDQd(request.cookies['user']):
+        if eng.isDQd(cookie):
 
             return redirect(url_for('dead'))
 
         else:
 
-            currentLevel = eng.getLevel(request.cookies['user']) # Get the current level
+            currentLevel = eng.getLevel(cookie) # Get the current level
             question = eng.getQuestion(currentLevel).replace('\\', '') # Get the question for that level
 
             if request.method == 'GET': # show the question
@@ -148,20 +174,20 @@ def play():
 
                 answer = request.form['ans'] # Get the answer
 
-                if eng.answerIsCorrect(answer, currentLevel, request.cookies['user']): # If the answer is correct
+                if eng.answerIsCorrect(answer, currentLevel, cookie): # If the answer is correct
 
-                    eng.logAnswer(user_id=request.cookies['user'],
+                    eng.logAnswer(user_id=cookie,
                                   levelNo=currentLevel,
                                   ans=answer,
                                   valid=True,
                                   IP=request.environ['REMOTE_ADDR']) # Log the answer as correct
 
-                    eng.incrementLevel(request.cookies['user']) # Increase the user's current level
-                    eng.setLastAnswerTime(request.cookies['user'], time.time()) # Set the user's time for the last answer
+                    eng.incrementLevel(cookie) # Increase the user's current level
+                    eng.setLastAnswerTime(cookie, time.time()) # Set the user's time for the last answer
 
                     return redirect(url_for('play')) # Reload the page
 
-                eng.logAnswer(user_id=request.cookies['user'],
+                eng.logAnswer(user_id=cookie,
                               levelNo=currentLevel,
                               ans=answer,
                               valid=False,
@@ -195,13 +221,14 @@ def leaderboard():
 @app.route('/logout')
 def logout():
 
-    if 'user' in request.cookies:
+    if USER_COOKIE_NAME in request.cookies:
 
-        eng.logout(request.cookies['user'], request.environ['REMOTE_ADDR']) # Logout the user. Sending the IP for logging purposes
+        eng.logout(request.cookies[USER_COOKIE_NAME], request.environ['REMOTE_ADDR']) # Logout the user. Sending the IP for logging purposes
 
         resp = make_response(redirect(url_for('index'))) # Send to the index page.
-        resp.set_cookie('user', value='', expires=0) # Remove the cookie
-
+        resp.set_cookie(USER_COOKIE_NAME, value='', expires=0) # Remove the cookie
+        resp.set_cookie(USER_SECRET_NAME, value='', expires=0)
+        
         return resp
 
     return redirect(url_for('index'))
@@ -234,7 +261,7 @@ def admin():
 
     if request.method == 'GET':
 
-        if ('admin' in request.cookies) and (eng.adminIsLoggedIn(request.cookies['admin'])):
+        if (ADMIN_COOKIE_NAME in request.cookies and ADMIN_SECRET_NAME in request.cookies) and (eng.adminIsLoggedIn(request.cookies[ADMIN_COOKIE_NAME])):
 
             return redirect(url_for('admin_dash'))
 
@@ -253,7 +280,8 @@ def admin():
             if id_of_admin:
 
                 response = make_response(redirect(url_for('admin_dash')))
-                response.set_cookie("admin", id_of_admin, expires=(time.time() + ADMIN_EXPIRY_DELAY))
+                response.set_cookie(ADMIN_COOKIE_NAME, id_of_admin, expires=(time.time() + ADMIN_EXPIRY_DELAY))
+                response.set_cookie(ADMIN_SECRET_NAME, eng.getAdminSecret(adminUsername), expires=(time.time() + ADMIN_EXPIRY_DELAY))
 
                 return response
 
@@ -262,9 +290,17 @@ def admin():
 @app.route('/5/7/whoami/admin/dash')
 def admin_dash():
 
-    if "admin" not in request.cookies:
+    if ADMIN_COOKIE_NAME not in request.cookies or ADMIN_SECRET_NAME not in request.cookies:
 
         return redirect(url_for("admin"))
+
+    if not eng.authenticate_admin_secret(request.cookies[ADMIN_COOKIE_NAME], request.cookies[ADMIN_SECRET_NAME]):
+
+        resp = make_response(redirect(url_for("admin")))
+        resp.set_cookie(ADMIN_COOKIE_NAME, '', expires=0)
+        resp.set_cookies(ADMIN_SECRET_NAME, '', expires=0)
+
+        return resp
 
     return render_template("admin_dashboard.html")
 
@@ -272,15 +308,31 @@ def admin_dash():
 @app.route('/5/7/whoami/admin/add', methods=['POST', 'GET'])
 def add_user():
 
-    if "admin" not in request.cookies:
+    if ADMIN_COOKIE_NAME not in request.cookies or ADMIN_SECRET_NAME not in request.cookies:
 
         return redirect(url_for('admin'))
 
     if request.method == 'GET':
 
+        if not eng.authenticate_admin_secret(request.cookies[ADMIN_COOKIE_NAME], request.cookies[ADMIN_SECRET_NAME]):
+
+            resp = make_response(redirect(url_for("admin")))
+            resp.set_cookie(ADMIN_COOKIE_NAME, '', expires=0)
+            resp.set_cookies(ADMIN_SECRET_NAME, '', expires=0)
+
+            return resp
+
         return render_template('add_user.html', error=False)
 
     else:
+
+        if not eng.authenticate_admin_secret(request.cookies[ADMIN_COOKIE_NAME], request.cookies[ADMIN_SECRET_NAME]):
+
+            resp = make_response(redirect(url_for("admin")))
+            resp.set_cookie(ADMIN_COOKIE_NAME, '', expires=0)
+            resp.set_cookies(ADMIN_SECRET_NAME, '', expires=0)
+
+            return resp
 
         email = request.form['emailID']
         schoolName = request.form['name']
@@ -288,11 +340,12 @@ def add_user():
         password = request.form['password']
         adminPass = request.form['adminPass']
 
-        if eng.checkAdminLogin(request.cookies['admin'], adminPass):
+        if eng.checkAdminLogin(request.cookies[ADMIN_COOKIE_NAME], adminPass):
 
             eng.add_user(email, password, username, schoolName)
 
         else:
+
             return render_template("add_user.html", error=True)
 
         return redirect(url_for('admin_dash'))
@@ -300,8 +353,18 @@ def add_user():
 @app.route('/5/7/whoami/admin/remove', methods=['POST', 'GET'])
 def remove_user():
 
-    if 'admin' not in request.cookies:
+    if ADMIN_COOKIE_NAME not in request.cookies or ADMIN_SECRET_NAME not in request.cookies:
+
         return redirect(url_for('admin'))
+
+
+    if not eng.authenticate_admin_secret(request.cookies[ADMIN_COOKIE_NAME], request.cookies[ADMIN_SECRET_NAME]):
+
+        resp = make_response(redirect(url_for("admin")))
+        resp.set_cookie(ADMIN_COOKIE_NAME, '', expires=0)
+        resp.set_cookies(ADMIN_SECRET_NAME, '', expires=0)
+
+        return resp
 
     if request.method == 'GET':
 
@@ -312,7 +375,7 @@ def remove_user():
         uname = request.form['username']
         adminPass = request.form['adminPass']
 
-        if eng.checkAdminLogin(request.cookies['admin'], adminPass):
+        if eng.checkAdminLogin(request.cookies[ADMIN_COOKIE_NAME], adminPass):
 
             eng.remove_user(uname)
 
@@ -324,8 +387,16 @@ def remove_user():
 @app.route('/5/7/whoami/admin/dq', methods=['POST', 'GET'])
 def dq_user():
 
-    if 'admin' not in request.cookies:
+    if ADMIN_COOKIE_NAME not in request.cookies or ADMIN_SECRET_NAME not in request.cookies:
         return redirect(url_for('admin'))
+
+    if not eng.authenticate_admin_secret(request.cookies[ADMIN_COOKIE_NAME], request.cookies[ADMIN_SECRET_NAME]):
+
+        resp = make_response(redirect(url_for("admin")))
+        resp.set_cookie(ADMIN_COOKIE_NAME, '', expires=0)
+        resp.set_cookies(ADMIN_SECRET_NAME, '', expires=0)
+
+        return resp
 
     if request.method == 'GET':
 
@@ -336,7 +407,7 @@ def dq_user():
         uname = request.form['username']
         adminPass = request.form['adminPass']
 
-        if eng.checkAdminLogin(request.cookies['admin'], adminPass):
+        if eng.checkAdminLogin(request.cookies[ADMIN_COOKIE_NAME], adminPass):
 
             eng.dq_user(uname)
 
@@ -348,8 +419,16 @@ def dq_user():
 @app.route('/5/7/whoami/admin/rq', methods=['POST', 'GET'])
 def rq_user():
 
-    if 'admin' not in request.cookies:
+    if ADMIN_COOKIE_NAME not in request.cookies or ADMIN_SECRET_NAME not in request.cookies:
         return redirect(url_for('admin'))
+
+    if not eng.authenticate_admin_secret(request.cookies[ADMIN_COOKIE_NAME], request.cookies[ADMIN_SECRET_NAME]):
+
+        resp = make_response(redirect(url_for("admin")))
+        resp.set_cookie(ADMIN_COOKIE_NAME, '', expires=0)
+        resp.set_cookies(ADMIN_SECRET_NAME, '', expires=0)
+
+        return resp
 
     if request.method == 'GET':
 
@@ -360,7 +439,7 @@ def rq_user():
         uname = request.form['username']
         adminPass = request.form['adminPass']
 
-        if eng.checkAdminLogin(request.cookies['admin'], adminPass):
+        if eng.checkAdminLogin(request.cookies[ADMIN_COOKIE_NAME], adminPass):
 
             eng.rq_user(uname)
 
@@ -372,8 +451,17 @@ def rq_user():
 @app.route('/5/7/whoami/admin/chlvl')
 def chlvl():
 
-    if 'admin' not in request.cookies:
+    if ADMIN_COOKIE_NAME not in request.cookies or ADMIN_SECRET_NAME not in request.cookies:
         return redirect(url_for('admin'))
+
+
+    if not eng.authenticate_admin_secret(request.cookies[ADMIN_COOKIE_NAME], request.cookies[ADMIN_SECRET_NAME]):
+
+        resp = make_response(redirect(url_for("admin")))
+        resp.set_cookie(ADMIN_COOKIE_NAME, '', expires=0)
+        resp.set_cookies(ADMIN_SECRET_NAME, '', expires=0)
+
+        return resp
 
     if request.method == 'GET':
 
@@ -385,7 +473,7 @@ def chlvl():
         increment = request.form['increment']
         adminPass = request.form['adminPass']
 
-        if eng.checkAdminLogin(request.cookies['admin'], adminPass):
+        if eng.checkAdminLogin(request.cookies[ADMIN_COOKIE_NAME], adminPass):
 
             eng.increment_level(uname, increment)
 
@@ -399,12 +487,13 @@ def chlvl():
 @app.route('/5/7/whoami/admin/logout')
 def adminLogout():
 
-    if "admin" in request.cookies:
+    if ADMIN_COOKIE_NAME in request.cookies:
 
-        eng.logoutAdmin(request.cookies['admin'], request.environ['REMOTE_ADDR'])
+        eng.logoutAdmin(request.cookies[ADMIN_COOKIE_NAME], request.environ['REMOTE_ADDR'])
 
         resp =make_response(redirect(url_for("admin")))
-        resp.set_cookie("admin", 0,expires=0)
+        resp.set_cookie(ADMIN_COOKIE_NAME, '0',expires=0)
+        resp.set_cookie(ADMIN_SECRET_NAME, '0', expires=0)
         return resp
 
     return redirect(url_for("admin"))
