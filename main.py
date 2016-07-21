@@ -228,7 +228,7 @@ def logout():
         resp = make_response(redirect(url_for('index'))) # Send to the index page.
         resp.set_cookie(USER_COOKIE_NAME, value='', expires=0) # Remove the cookie
         resp.set_cookie(USER_SECRET_NAME, value='', expires=0)
-        
+
         return resp
 
     return redirect(url_for('index'))
@@ -448,7 +448,7 @@ def rq_user():
 
         return redirect(url_for('admin_dash'))
 
-@app.route('/5/7/whoami/admin/chlvl')
+@app.route('/5/7/whoami/admin/chlvl', methods=['POST', 'GET'])
 def chlvl():
 
     if ADMIN_COOKIE_NAME not in request.cookies or ADMIN_SECRET_NAME not in request.cookies:

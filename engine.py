@@ -270,7 +270,7 @@ class Engine(object):
         maxLevel = self.miscCollection.find_one({"_id":"maxLevel"})['value']
 
         if level <= maxLevel:
-
+            
             return self.questionCollection.find_one({"_id":level})['question']
 
         return None
@@ -403,6 +403,7 @@ class Engine(object):
                                         'disqualified': False,
                                         'secret': secret,
                                         'team': -1,
+                                        'used_adv': False,
                                         'answerTimes':[]})
 
         email_message = REGISTRATION_MSG + '\r\n' + 'username: ' + username + '\r\n' + "password: " + password
@@ -434,4 +435,4 @@ class Engine(object):
 
         if user and user['team'] == MYSTIC:
 
-            self.userCollection.update_one({"username":username}, {"inc":{"currentLevel":increment}})
+            self.userCollection.update_one({"username":username}, {"$inc":{"currentLevel":increment}})
