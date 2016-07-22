@@ -1,0 +1,21 @@
+<HTML>
+    <HEAD>
+        <TITLE> Set Start Time </TITLE>
+    </HEAD>
+
+    <BODY>
+        <form method="POST" action="{{url_for('ch_start_time')}}">
+            New Starting time:
+            <input type="number" name="time" /> <br>
+
+            Your password:
+            <input type="password" name="adminPass" />
+
+            <input type="submit" />
+        </form>
+
+    {% if error %}
+      <H1>ERROR. Invalid Login. Try again</H1>
+    {%endif%}
+    </BODY>
+</HTML>

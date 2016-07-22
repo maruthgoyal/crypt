@@ -437,3 +437,11 @@ class Engine(object):
         if user and user['team'] == MYSTIC:
 
             self.userCollection.update_one({"username":username}, {"$inc":{"currentLevel":increment}})
+
+    def set_start_time(self, newTime):
+
+        self.miscCollection.update_one({"_id":"times"}, {"$set":{"startTime":newTime}})
+
+    def set_end_time(self, newTime):
+
+        self.miscCollection.update_one({"_id":"times"}, {"$set":{"endTime":newTime}})

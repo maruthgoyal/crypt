@@ -482,6 +482,74 @@ def chlvl():
 
         return redirect(url_for('admin_dash'))
 
+@app.route('/5/7/whoami/admin/setStartTime', methods=['POST', 'GET'])
+def ch_start_time():
+
+    if ADMIN_COOKIE_NAME not in request.cookies or ADMIN_SECRET_NAME not in request.cookies:
+        return redirect(url_for('admin'))
+
+
+    if not eng.authenticate_admin_secret(request.cookies[ADMIN_COOKIE_NAME], request.cookies[ADMIN_SECRET_NAME]):
+
+        resp = make_response(redirect(url_for("admin")))
+        resp.set_cookie(ADMIN_COOKIE_NAME, '', expires=0)
+        resp.set_cookies(ADMIN_SECRET_NAME, '', expires=0)
+
+        return resp
+
+    if request.method == 'GET':
+
+        return render_template("chStartTime.html", error=False)
+
+    else:
+
+        new_time = request.form['time']
+        adminPass = request.form['adminPass']
+
+        if eng.checkAdminLogin(request.cookies[ADMIN_COOKIE_NAME], adminPass):
+
+            eng.set_start_time(int(new_time))
+
+        else:
+            return render_template("chStartTime.html", error=True)
+
+        return redirect(url_for('admin_dash'))
+
+
+@app.route('/5/7/whoami/admin/setEndTime', methods=['POST', 'GET'])
+def ch_end_time():
+
+    if ADMIN_COOKIE_NAME not in request.cookies or ADMIN_SECRET_NAME not in request.cookies:
+        return redirect(url_for('admin'))
+
+
+    if not eng.authenticate_admin_secret(request.cookies[ADMIN_COOKIE_NAME], request.cookies[ADMIN_SECRET_NAME]):
+
+        resp = make_response(redirect(url_for("admin")))
+        resp.set_cookie(ADMIN_COOKIE_NAME, '', expires=0)
+        resp.set_cookies(ADMIN_SECRET_NAME, '', expires=0)
+
+        return resp
+
+    if request.method == 'GET':
+
+        return render_template("chEndTime.html", error=False)
+
+    else:
+
+        new_time = request.form['time']
+        adminPass = request.form['adminPass']
+
+        if eng.checkAdminLogin(request.cookies[ADMIN_COOKIE_NAME], adminPass):
+
+            eng.set_end_time(int(new_time))
+
+        else:
+            return render_template("chEndTime.html", error=True)
+
+        return redirect(url_for('admin_dash'))
+
+
 
 
 @app.route('/5/7/whoami/admin/logout')
