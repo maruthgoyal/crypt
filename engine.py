@@ -27,8 +27,9 @@ class Engine(object):
 
         ''' Initialize all Database connections'''
 
-        self.connection = pymongo.MongoClient(MONGODB_SERVER, MONGODB_PORT)
-        self.connection["admin"].authenticate(USER, PASSWORD, mechanism="SCRAM-SHA-1")
+        #self.connection = pymongo.MongoClient(MONGODB_SERVER, MONGODB_PORT)
+        #self.connection["admin"].authenticate(USER, PASSWORD, mechanism="SCRAM-SHA-1")
+        self.connection = pymongo.MongoClient(MONGO_URI % (USER, PASSWORD))
         db = self.connection[MONGO_DB]
 
         self.userCollection = db[USER_COLLECTION]     # User credentials: Username, Password, ID, current Level, list of level completion times, last completed time, dq or not, logged in or not
@@ -270,7 +271,7 @@ class Engine(object):
         maxLevel = self.miscCollection.find_one({"_id":"maxLevel"})['value']
 
         if level <= maxLevel:
-            
+
             return self.questionCollection.find_one({"_id":level})['question']
 
         return None

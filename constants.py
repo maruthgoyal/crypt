@@ -32,3 +32,5 @@ TIME_BONUS = (30 * 60) # 30 Minutes
 VALOR = 0
 MYSTIC = 1
 INSTINCT = 2
+
+MONGO_URI = "mongodb://%s:%s@ds023315.mlab.com:23315/crypt"
