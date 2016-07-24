@@ -79,9 +79,6 @@ def before_request():
 @limiter.limit("50/hour") # Not more than 50 visits to the main page per hour
 def index():
 
-    start, end = eng.getTimes()
-    currentTime = time.time()
-
     #print currentTime, start, end
     # print request.access_route, request.environ['REMOTE_ADDR']
 
