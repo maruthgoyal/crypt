@@ -179,7 +179,7 @@ def play():
                                   valid=True,
                                   IP=request.environ['REMOTE_ADDR']) # Log the answer as correct
 
-                    eng.incrementLevel(cookie) # Increase the user's current level
+                    eng.incrementLevel(cookie, currentLevel) # Increase the user's current level
                     eng.setLastAnswerTime(cookie, time.time()) # Set the user's time for the last answer
 
                     return redirect(url_for('play')) # Reload the page

@@ -221,11 +221,11 @@ class Engine(object):
 
 
 
-    def incrementLevel(self, user_id):
+    def incrementLevel(self, user_id, currentLevel):
 
         ''' Increase the user's level by 1 '''
 
-        self.userCollection.find_one_and_update({"_id":user_id},
+        self.userCollection.find_one_and_update({"_id":user_id, "currentLevel":currentLevel},
                                                 {"$inc" : {"currentLevel" : 1}})
 
 
