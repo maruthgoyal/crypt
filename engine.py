@@ -246,11 +246,11 @@ class Engine(object):
 
         for user in self.userCollection.find({"disqualified":False}):
 
-            tempList.append((user['currentLevel'], user['lastLevelTime'], user['NAME']))
+            tempList.append((user['currentLevel'], user['lastLevelTime'], user['NAME'], user['team']))
 
         tempList.sort(reverse=True, cmp=comp)
 
-        return [[str(x[2]), x[0]] for x in tempList]
+        return [[str(x[2]), x[0], rank+1, x[-1]] for rank,x in enumerate(tempList)]
 
 
 
