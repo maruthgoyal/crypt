@@ -1,3 +1,2 @@
-1. Save answers in HASHED FORM. Use the SALT in the DB and HASHLIB to hash it. VERY IMPORTANT
-2. Save passwords in HASHED FORM. Use the SALT in the DB and HASHLIB to hash it. VERY VERY IMPORTANT
-3. Index User database on _id and username
+1. All CSS, JS and Images in the static folder. (mandatory)
+2. So it's gonna be /static/whateverthehell
