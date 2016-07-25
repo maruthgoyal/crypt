@@ -225,8 +225,8 @@ class Engine(object):
 
         ''' Increase the user's level by 1 '''
 
-        self.userCollection.find_one_and_update({"_id":user_id, "currentLevel":currentLevel},
-                                                {"$inc" : {"currentLevel" : 1}})
+        self.userCollection.update_one({"_id":user_id},
+                                       {"$set" : {"currentLevel" : (currentLevel + 1)}})
 
 
 
