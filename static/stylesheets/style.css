@@ -1,0 +1,63 @@
+@viewport{
+	zoom: 1.0;
+	width: extend-to-zoom;
+}
+@-ms-viewport{
+	width: extend-to-zoom;
+	zoom: 1.0;
+}
+*, *:before, *:after {
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+.container {
+	margin: 0 auto;
+	width: 90%;
+	padding: 0 5%;
+	background-color: #ecf0f1;
+	margin-top: 98vh;
+	box-shadow: 0 0 30px 3px #000;
+}
+.column {
+	float: left;
+	margin-left: 5%;
+} 
+.column:first-child {
+	margin-left: 0;
+}
+.column.full {
+	width: 100%;
+}
+
+.column.two-thirds {
+	width: 65%;
+}
+
+.column.half {
+	width: calc( 50% );
+}
+
+.column.one-third {
+	width: 30%;
+}
+
+.column.one-fourth {
+	width: 21.25%;
+}
+.clearfix:before,
+.clearfix:after {
+	content: " ";
+	display: table;
+}
+
+.clearfix:after {
+	clear: both;
+}
+
+.clearfix {
+	*zoom: 1;
+}
+.row {
+	overflow: hidden;
+}
