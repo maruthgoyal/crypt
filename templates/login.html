@@ -1,0 +1,27 @@
+<html>
+
+<head>
+  <title>FooBar</title>
+</head>
+
+<body>
+
+  <form action="{{url_for('login')}}" method="POST">
+    <input name="username" placeholder="username" type="text" />
+    <input name="password" type="password" />
+    <input type="submit" />
+  </form>
+
+  {% if error %}
+    <h4>Invalid Login. Try Again</h4>
+  {%endif%}
+
+  {% if mess %}
+
+    <h2>{{mess}}</h2>
+
+  {%endif%}
+
+</body>
+
+</html>
