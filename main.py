@@ -66,3 +66,6 @@ def signup():
         eng.register(data)
 
         return render_template("signup.html", message="Thanks for registering. See you there.")
+
+if __name__=="__main__":
+    app.run(debug=True)
