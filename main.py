@@ -169,7 +169,7 @@ def play():
 
             else: # User submitted an answer
 
-                answer = request.form['ans'] # Get the answer
+                answer = str(request.form['ans']).lower().replace(' ', '') # Get the answer
 
                 if eng.answerIsCorrect(answer, currentLevel, cookie): # If the answer is correct
 
