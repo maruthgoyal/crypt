@@ -17,6 +17,8 @@ ADMIN_COOKIE_NAME = "admin"
 USER_SECRET_NAME = "user_secret"
 ADMIN_SECRET_NAME = "admin_secret"
 
+HUNT_PATH = '/hunt'
+
 limiter = Limiter(
         app,
         key_func=get_remote_address,
@@ -72,12 +74,19 @@ def before_request():
 
 
 
-
-
-
-@app.route('/', methods=['POST', 'GET'])
-@limiter.limit("50/hour") # Not more than 50 visits to the main page per hour
+@app.route('/')
 def index():
+    return render_template("index.html")
+
+
+@app.route(HUNT_PATH + '/rules')
+def rules():
+    return render_template("rules.html")
+
+
+@app.route(HUNT_PATH, methods=['POST', 'GET'])
+@limiter.limit("50/hour") # Not more than 50 visits to the main page per hour
+def login():
 
     #print currentTime, start, end
     # print request.access_route, request.environ['REMOTE_ADDR']
@@ -88,7 +97,7 @@ def index():
 
             return redirect(url_for('play')) # If so, go straight to the play page. Yay.
 
-        return render_template('index.html', error=False) # Otherwise, go to Login.
+        return render_template('login.html', error=False) # Otherwise, go to Login.
 
     else:
 
@@ -112,14 +121,14 @@ def index():
 
                 return resp
 
-        return render_template('index.html', error=True) # The login was invalid
+        return render_template('login.html', error=True) # The login was invalid
 
 
 
 
 
 
-@app.route('/play', methods=['POST', 'GET'])
+@app.route(HUNT_PATH + '/play', methods=['POST', 'GET'])
 def play():
 
     start, end = eng.getTimes()
@@ -127,7 +136,7 @@ def play():
 
     if USER_COOKIE_NAME not in request.cookies or USER_SECRET_NAME not in request.cookies: # User is not logged in. Gavar.
 
-        resp = make_response(redirect(url_for('index')))
+        resp = make_response(redirect(url_for('login')))
         resp.set_cookie(USER_COOKIE_NAME, '', expires=0)
         resp.set_cookie(USER_SECRET_NAME, '', expires=0)
 
@@ -143,7 +152,7 @@ def play():
 
     if not eng.authenticate_secret(cookie, secret):
 
-        resp = make_response(redirect(url_for('index')))
+        resp = make_response(redirect(url_for('login')))
         resp.set_cookie(USER_COOKIE_NAME, '', expires=0)
         resp.set_cookie(USER_SECRET_NAME, '', expires=0)
 
@@ -204,7 +213,7 @@ def play():
 
 
 
-@app.route('/leaderboard')
+@app.route(HUNT_PATH + '/leaderboard')
 def leaderboard():
 
     leaderList = eng.getLeaderBoard()
@@ -215,26 +224,26 @@ def leaderboard():
 
 
 
-@app.route('/logout')
+@app.route(HUNT_PATH + '/logout')
 def logout():
 
     if USER_COOKIE_NAME in request.cookies:
 
         eng.logout(request.cookies[USER_COOKIE_NAME], request.environ['REMOTE_ADDR']) # Logout the user. Sending the IP for logging purposes
 
-        resp = make_response(redirect(url_for('index'))) # Send to the index page.
+        resp = make_response(redirect(url_for('login'))) # Send to the index page.
         resp.set_cookie(USER_COOKIE_NAME, value='', expires=0) # Remove the cookie
         resp.set_cookie(USER_SECRET_NAME, value='', expires=0)
 
         return resp
 
-    return redirect(url_for('index'))
+    return redirect(url_for('login'))
 
 
 
 
 
-@app.route('/dq')
+@app.route(HUNT_PATH + '/dq')
 def dead():
 
     return render_template("dead.html")
@@ -253,7 +262,7 @@ def dead():
 ###### Admin Stuff ###########
 ##############################
 
-@app.route('/5/7/whoami/admin', methods=['POST', 'GET'])
+@app.route(HUNT_PATH + '/5/7/whoami/admin', methods=['POST', 'GET'])
 def admin():
 
     if request.method == 'GET':
@@ -284,7 +293,7 @@ def admin():
 
         return render_template("admin_login.html", error=True) # If either username or password is missing, or invalid login
 
-@app.route('/5/7/whoami/admin/dash')
+@app.route(HUNT_PATH + '/5/7/whoami/admin/dash')
 def admin_dash():
 
     if ADMIN_COOKIE_NAME not in request.cookies or ADMIN_SECRET_NAME not in request.cookies:
@@ -302,7 +311,7 @@ def admin_dash():
     return render_template("admin_dashboard.html")
 
 
-@app.route('/5/7/whoami/admin/add', methods=['POST', 'GET'])
+@app.route(HUNT_PATH + '/5/7/whoami/admin/add', methods=['POST', 'GET'])
 def add_user():
 
     if ADMIN_COOKIE_NAME not in request.cookies or ADMIN_SECRET_NAME not in request.cookies:
@@ -347,7 +356,7 @@ def add_user():
 
         return redirect(url_for('admin_dash'))
 
-@app.route('/5/7/whoami/admin/remove', methods=['POST', 'GET'])
+@app.route(HUNT_PATH + '/5/7/whoami/admin/remove', methods=['POST', 'GET'])
 def remove_user():
 
     if ADMIN_COOKIE_NAME not in request.cookies or ADMIN_SECRET_NAME not in request.cookies:
@@ -381,7 +390,7 @@ def remove_user():
 
         return redirect(url_for('admin_dash'))
 
-@app.route('/5/7/whoami/admin/dq', methods=['POST', 'GET'])
+@app.route(HUNT_PATH + '/5/7/whoami/admin/dq', methods=['POST', 'GET'])
 def dq_user():
 
     if ADMIN_COOKIE_NAME not in request.cookies or ADMIN_SECRET_NAME not in request.cookies:
@@ -413,7 +422,7 @@ def dq_user():
 
         return redirect(url_for('admin_dash'))
 
-@app.route('/5/7/whoami/admin/rq', methods=['POST', 'GET'])
+@app.route(HUNT_PATH + '/5/7/whoami/admin/rq', methods=['POST', 'GET'])
 def rq_user():
 
     if ADMIN_COOKIE_NAME not in request.cookies or ADMIN_SECRET_NAME not in request.cookies:
@@ -445,7 +454,7 @@ def rq_user():
 
         return redirect(url_for('admin_dash'))
 
-@app.route('/5/7/whoami/admin/chlvl', methods=['POST', 'GET'])
+@app.route(HUNT_PATH + '/5/7/whoami/admin/chlvl', methods=['POST', 'GET'])
 def chlvl():
 
     if ADMIN_COOKIE_NAME not in request.cookies or ADMIN_SECRET_NAME not in request.cookies:
@@ -479,7 +488,7 @@ def chlvl():
 
         return redirect(url_for('admin_dash'))
 
-@app.route('/5/7/whoami/admin/setStartTime', methods=['POST', 'GET'])
+@app.route(HUNT_PATH + '/5/7/whoami/admin/setStartTime', methods=['POST', 'GET'])
 def ch_start_time():
 
     if ADMIN_COOKIE_NAME not in request.cookies or ADMIN_SECRET_NAME not in request.cookies:
@@ -513,7 +522,7 @@ def ch_start_time():
         return redirect(url_for('admin_dash'))
 
 
-@app.route('/5/7/whoami/admin/setEndTime', methods=['POST', 'GET'])
+@app.route(HUNT_PATH + '/5/7/whoami/admin/setEndTime', methods=['POST', 'GET'])
 def ch_end_time():
 
     if ADMIN_COOKIE_NAME not in request.cookies or ADMIN_SECRET_NAME not in request.cookies:
@@ -549,7 +558,7 @@ def ch_end_time():
 
 
 
-@app.route('/5/7/whoami/admin/logout')
+@app.route(HUNT_PATH + '/5/7/whoami/admin/logout')
 def adminLogout():
 
     if ADMIN_COOKIE_NAME in request.cookies:

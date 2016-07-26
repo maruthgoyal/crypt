@@ -1,27 +1,461 @@
-<html>
+<!DOCTYPE HTML>
+<HTML>
+    <HEAD>
+        <META name="viewport" content="initial-scale=1">
+        <TITLE>
+            eSpice v13.0
+        </TITLE>
+        <LINK rel="icon" href="static/images/favicon.ico" type="image/x-icon" />
+        <!-- Embedding Google Fonts -->
+        <LINK href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400,300' rel='stylesheet' type='text/css' />
+        <!-- Embedding stylesheets -->
+        <LINK rel="stylesheet" href="static/stylesheets/normalize.css" />
+        <LINK rel="stylesheet" href="static/stylesheets/style.css" />
+        <LINK rel="stylesheet" href="static/stylesheets/override.css" />
+        <LINK rel="stylesheet" href="static/stylesheets/animate.css" />
+        <!-- Embedding scripts -->
+        <SCRIPT src="/static/scripts/wow.min.js"></SCRIPT>
+        <SCRIPT src="/static/scripts/header.js"></SCRIPT>
+        <!--<SCRIPT type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.js"></SCRIPT>-->
+        <SCRIPT src="/static/scripts/jquery-2.1.0.min.js"></SCRIPT>
+    </HEAD>
+    <BODY>
 
-<head>
-  <title>FooBar</title>
-</head>
+        <DIV class="nav" id="bar">
+                <IMG src="/static/images/icon.png" align="left" class="menu" onclick="show()" />
+                <A class="link wow fadeInDown" href="#about">About</A>
+                <A class="link wow fadeInDown" href="#schedule">Schedule</A>
+                <A class="link wow fadeInDown" href="#rules">Rules</A>
+                <A class="link wow fadeInDown" href="#events">Events</A>
+                <A class="link wow fadeInDown" href="#contact">Contact</A>
+            </DIV>
+            <div class="hero">
+                <DIV class="row">
+                    <DIV class="row">
+                    <DIV class="column full">
+                        <IMG class="heroImg" src="/static/images/logo.png" class="wow fadeInDown banner"/>
+                    </DIV>
+                </DIV>
+                <DIV class="row heroBtns" >
+                    <!-- <DIV class="column right" style="width: 47.5%">
+                        <BUTTON class="ghost push wow fadeInUp" onclick="window.location.href = '#';">
+                        Results
+                        </BUTTON>
+                    </DIV>
+                    <DIV class="column left" style="width: 47.5%">
+                        <BUTTON class="ghost push wow fadeInUp" href="#" onclick="window.location.href = '';">
+                        Hunt
+                        </BUTTON>
+                    </DIV> -->
 
-<body>
+                  <center>
+                     <BUTTON class="ghost push wow fadeInUp" onclick="window.location.pathname= '/signup';">Register</BUTTON>
 
-  <form action="{{url_for('index')}}" method="POST">
-    <input name="username" placeholder="username" type="text" />
-    <input name="password" type="password" />
-    <input type="submit" />
-  </form>
+                  </center>
+                </DIV>
+            </div>
+        </DIV>
 
-  {% if error %}
-    <h4>Invalid Login. Try Again</h4>
-  {%endif%}
+        <DIV class="container">
+            <DIV class="row section wow fadeInUp" id="about">
+                <DIV class="column full title wow fadeInDown">
+                    About
+                </DIV>
+                <DIV class="column half wow fadeInUp">
+                    <P>
+                        <br><br><br>
+                        The Computer Club of Delhi Public School, Noida - eSpice is pleased to host its prestigious Annual Inter-School IT Symposium, eSpice v13.0 on 20th  August 2016.<br><br>
 
-  {% if mess %}
+                        We look forward to your active participation.<br><br>
+                    </P>
+                </DIV>
+                <DIV class="column half wow fadeInUp">
+                    <IMG src="/static/images/team.jpg" id="team" />
+                </DIV>
+            </DIV>
 
-    <h2>{{mess}}</h2>
 
-  {%endif%}
+            <DIV class="row section wow fadeInUp" id="schedule">
+                <DIV class="column full title wow fadeInDown">
+                    Schedule
+                </DIV>
+                <DIV class="column full">
+                    <TABLE class="schedule">
+                        <TR>
+                            <TD>Time/Venue</TD>
+                            <TD class="venue">Sr. Comp. Lab</TD>
+                            <TD class="venue">Bits & Bytes Lab</TD>
+                            <TD class="venue">Jr. Lab</TD>
+                            <TD class="venue">AV Room</TD>
+                            <TD class="venue">M.P. Hall</TD>
+                            <TD class="venue">Bio Lab</TD>
+                        </TR>
+                        <TR>
+                            <TD class="time">8:00 - 8:30</TD>
+                            <TD colspan="7">Registration (Reception)</TD>
+                        </TR>
+                        <TR>
+                            <TD class="time">8:30 - 9:00</TD>
+                        </TR>
+                        <TR>
+                            <TD class="time">9:00 - 9:30</TD>
+                            <TD class="blank"></TD>
+                            <TD class="blank"></TD>
+                            <TD class="blank"></TD>
+                            <TD class="blank"></TD>
+                            <TD class="blank"></TD>
+                            <TD class="blank"></TD>
+                        </TR>
+                        <TR>
+                            <TD class="time">9:30 - 10:00</TD>
+                            <TD rowspan="6">A/V <br><br> Design <br><br> Music Mixing</TD>
+                            <TD rowspan="6">Sr. Programming</TD>
+                            <TD rowspan="3">FLAsh</TD>
+                            <TD rowspan="6">Gaming</TD>
+                            <TD rowspan="3">GD++</TD>
+                            <TD rowspan="3">QuizCross Prelims</TD>
+                        </TR>
 
-</body>
+                        <TR>
+                            <TD class="time">10:00 - 10:30</TD>
+                        </TR>
 
-</html>
+                        <TR>
+                            <TD class="time">10:30 - 11:00</TD>
+                        </TR>
+
+                        <TR>
+                            <TD class="time">11:00 - 11:30</TD>
+                            <TD rowspan="3">Turtle Wars</TD>
+                            <TD rowspan="3">QuizCross Finals</TD>
+                            <TD rowspan="3"></TD>
+                        </TR>
+
+                        <TR>
+                            <TD class="time">11:30 - 12:00</TD>
+                        </TR>
+
+                        <TR>
+                            <TD class="time">12:00 - 12:30</TD>
+                        </TR>
+
+                        <TR>
+                            <TD class="time">12:30 - 1:00</TD>
+                            <TD class="blank"></TD>
+                            <TD class="blank"></TD>
+                            <TD class="blank"></TD>
+                            <TD class="blank"></TD>
+                            <TD class="blank"></TD>
+                            <TD class="blank"></TD>
+                        </TR>
+
+                        <TR>
+                            <TD class="time">1:00 - 1:30</TD>
+                            <TD colspan="7" rowspan="2">Formal Valedictory & Prize Distribution</TD>
+                        </TR>
+                        <TR>
+                            <TD class="time">1:30 - 2:00</TD>
+                        </TR>
+                    </TABLE>
+                    <CENTER>
+                        <BUTTON class="ghost push sched wow fadeInUp" onclick="window.location.href = '/static/images/schedule.PNG';">
+                        View schedule
+                        </BUTTON>
+                    </CENTER>
+                </DIV>
+            </DIV>
+
+            <DIV class="row section wow fadeInUp" id="rules">
+                <DIV class="column full title wow fadeInDown">
+                    Rules and Regulations
+                </DIV>
+                <DIV class="column full">
+                    <UL style="font-size: 18px; font-weight: 300;">
+                        <LI>Schools must register online <a href="/signup" style="text-decoration: none;"><b>here</b></a> latest by 5th August.<BR>
+                        <LI>Schools must reach the registration venue latest by 8:30 A.M.<BR>
+                        <LI>Participants are advised not to take part in events with conflicting time slots.<BR>
+                        <LI>Students are not allowed to bring their own laptops unless specified.<BR>
+                        <LI>If any student is found guilty of using unfair means, the concerned school will be disqualified from that particular event.
+                        <LI>Decision of the judges will be final and binding.
+                        <LI>Winning schools must be present at the prize distribution ceremony else the prizes will go to the next school in the points tally.
+                        <LI>Participants must be in school uniform.
+                        <LI>Eligibility for events must be maintained.
+                        <LI>Participants must take care of their personal belongings. The school shall not be held responsible for any loss or damage.
+                        <LI>The registration form, latest updates, announcements and results will be posted on the Facebook page. <a href="https://www.fb.com/espice"  target="tabName">[facebook.com/eSpice]</a>
+                        <LI><b>Participation in all events is mandatory to qualify for the overall position.</b>
+
+                    </P>
+                </DIV>
+            </DIV>
+
+            <DIV class="row section wow fadeInUp" id="events">
+                <DIV class="column full title wow fadeInDown">
+                    Events
+                </DIV>
+                <DIV class="column half wow fadeInUp">
+                    <DIV class="event_title">
+                        Turtle Wars
+                    </DIV>
+                    <P class="event">
+                        Participant(s): 2 Students per school
+                        <BR /><BR />
+                        Software: MSW LOGO
+                        <BR /><BR />
+                        Eligibility: Class III-V
+                        <BR /><BR />
+                        Make the turtle dance to your whims. <br>
+                        It's time for the juniors to shine. <br>
+                    </P>
+                </DIV>
+                <DIV class="column half wow fadeInUp">
+                    <DIV class="event_title">
+                        Gaming
+                    </DIV>
+                    <P class="event">
+                        Participant(s): 1 Students per school
+                        <BR /><BR />
+                        Eligibility: Class VIII-XII
+                        <BR /><BR />
+                        Expect the unexpected? <BR /><BR />
+                        Only the real gamer will survive, Get ready for some action!<BR />
+                        Games will be revealed on the spot.
+
+                    </P>
+                </DIV>
+            </DIV>
+
+
+            <DIV class="row section wow fadeInUp" id="events">
+                <DIV class="column half wow fadeInUp">
+                    <DIV class="event_title">
+                        .FLAsh
+                    </DIV>
+                    <P class="event">
+                        Participant(s): 2 Student per school
+                        <BR /><BR />
+                        Eligibility: Class VI-VII
+                        <BR /><BR />
+                        Students will be required to create an animation on the topic which will be given on the spot.   <br>
+                    </P>
+                </DIV>
+                <DIV class="column half wow fadeInUp">
+                    <DIV class="event_title">
+                        ???
+                    </DIV>
+                    <P class="event">
+                        Participant(s): 1 Students per school<BR /><BR />
+                        Eligibilty: Class IX-XII<BR /><BR />
+                        :)
+                    </P>
+                </DIV>
+            </DIV>
+
+
+            <DIV class="row section wow fadeInUp" id="events">
+                <DIV class="column half wow fadeInUp">
+                    <DIV class="event_title">
+                        Music Mixing
+                    </DIV>
+                    <P class="event">
+                        Participant(s): 2 Students per school<BR /><BR />
+                        Software: Audacity, Virtual DJ, FL Studio, Soundforge<BR /><BR />
+                        Eligibility: Class IX-XII<BR /><BR />
+
+
+                        Do you have the audacity to do it?<BR /><BR />
+                        Participants need to send their prelim entries latest by 10th August.<BR />
+                        The topic for the prelims will be uploaded on our Facebook page. <BR />
+                        The prelim entries need to be mailed on espicev13@gmail.com<BR />
+                        8 teams will get selected for the onsite finals where they’ll have to create a mashup from the given set of songs.<BR />
+                        The finalists will be required to bring their own headsets.<BR />
+
+                    </P>
+                </DIV>
+                <DIV class="column half wow fadeInUp">
+                    <DIV class="event_title">
+                    Snapography
+                    </DIV>
+                    <P class="event">
+                        Participant(s): 1 Students per school<BR /><BR />
+
+                        Eligibility: Class X-XII<BR /><BR />
+
+                        A small write up explaining the photos should be sent along with the pictures.<BR />
+                        The selected 8 teams will be required to carry their camera equipments for the on-site event.<BR />
+                        The participants need to send two self clicked photos on the given topic Symmetry<BR />
+                        Pictures have to be mailed to: espicev13@gmail.com by 10th August<BR />
+                    </P>
+                </DIV>
+            </DIV>
+
+
+            <DIV class="row section wow fadeInUp" id="events">
+                <DIV class="column half wow fadeInUp">
+                    <DIV class="event_title">
+                        GD++
+                    </DIV>
+                    <P class="event">
+
+                        Participant(s): 1 Student per school<BR /><BR />
+                        Eligibility: Class X-XII<BR /><BR />
+
+                        Ever believed talking was your skill? Here is your event.<BR /><BR />
+                        The participants should be well versed with the latest in technology.<BR />
+                        Students are advised to carry a paper and pen to note down vital points.<BR />
+                        The topic will be given on the spot.<BR />
+
+                    </P>
+                </DIV>
+                <DIV class="column half wow fadeInUp">
+                    <DIV class="event_title">
+                        QuizCross
+                    </DIV>
+                    <P class="event">
+                        Participant(s): 2 Students per school.<BR /><BR />
+                        Eligibility: Class IX-XII<BR /><BR />
+                        We'll ask you the questions. You'll have the answers. Maybe.<BR /><BR />F
+                        Six teams will be selected for the final round on the basis of a written preliminary round. It will consist of a Quiz and a Crossword.<BR />
+                        Follow our Facebook page for further details. <BR /><BR />
+                    </P>
+                </DIV>
+            </DIV>
+
+
+            <DIV class="row section wow fadeInUp" id="events">
+                <DIV class="column half wow fadeInUp">
+                    <DIV class="event_title">
+                        Sr. Programming
+                    </DIV>
+                    <P class="event">
+                        Participant(s): 2 Students per school<BR /><BR />
+                        Eligibility: Class X-XII<BR /><BR />
+                        Software: DEV C++<BR /><BR />
+
+                        cout<<"You get to say - I'm cool, int i?"; <BR />
+                        <code>// Let logic prevail!</code><BR /><BR />
+
+                        Prelims will be held online.<BR />
+                        A total of 8 schools will be shortlisted for the onsite event. Check() our Facebook page for further details.<BR />
+                    </P>
+                </DIV>
+                <DIV class="column half wow fadeInUp">
+                    <DIV class="event_title">
+                        Design
+                    </DIV>
+                    <P class="event">
+                        Participant(s): 2 Students per school<BR /><BR />
+                        Eligibility: Class XI-XII<BR /><BR />
+                        Software: Adobe Photoshop CC, Sublime Text 3, Google Chrome<BR /><BR />
+
+                        8 teams will be called for the onsite finals on the basis of their prelim entries. <BR />
+                        The event will incorporate both web designing and digital imaging. The topic will be given on the spot.<BR />
+                        Prelims topic will be announced on our Facebook page. The prelim entries are to be mailed to espicev13@gmail.com latest by 10th August.<BR />
+
+                    </P>
+                </DIV>
+            </DIV>
+
+
+            <DIV class="row section wow fadeInUp" id="events">
+                <DIV class="column half wow fadeInUp">
+                    <DIV class="event_title">
+                        A/V
+                    </DIV>
+                    <P class="event">
+                        Participant(s): 2 Students per school<BR /><BR />
+                        Eligibility: Class IX-XII<BR /><BR />
+                        Participants are required to make an advertisement of a digital assistant .<BR />
+                        The participants need to upload their entries on YouTube.<BR />
+                        Judging will be done on the quality and content.The best teams will be called for cross-questioning on the day of the event and will showcase their projects.<BR /><BR />
+                        Microsoft has Cortana, Apple has Siri, Show us what you have<BR /><BR />
+                        Links have to be mailed to: chip.in.espice@gmail.com by 10th August
+                    </P>
+                </DIV>
+                <DIV class="column half wow fadeInUp">
+
+                </DIV>
+            </DIV>
+
+            <DIV class="row section wow fadeInUp" id="contact">
+                <DIV class="column full title wow fadeInDown">
+                    Contact
+                </DIV>
+                <DIV class="column full">
+                    <P>
+                            In case of any queries or doubts, you can get in touch with us on facebook, drop us a mail or simply give us a call.
+                            <BR /><BR />
+                            Ms. Monica Dewan<NO>+91-9910979898</NO><BR />
+                            Ms. Vandana Sabharwal<NO>+91-9910005880</NO><BR />
+                    </P>
+                </DIV>
+                <DIV class="column half wow fadeInUp symbol fadeInUp wow">
+                            <A href="https://www.facebook.com/eSpice" target="_blank">circlefacebook</A>
+                </DIV>
+                <DIV class="column half symbol fadeInUp wow">
+                            <A href="mailto:espicev13@gmail.com" target="_blank">circleemail</A>
+
+
+                </DIV>
+            </DIV>
+        </DIV>
+        <DIV class="wow fadeIn foot">
+            <BR />
+            Made with &hearts; in Noida.
+            <BR />
+            Maruth Goyal | Parth Dhar | Prayas Kumar Singh
+        </DIV>
+        <SCRIPT>
+            new WOW().init();
+
+            var menu = "small";
+
+            $('.link').click(function () {
+                if(window.innerHeight > window.innerWidth){
+
+                    $('.link').css('opacity','0').delay(250);
+                    $('.link').css('display','none');
+                    $('.nav').css('min-height','3.5em');
+                    menu = "small";
+                    }
+                });
+
+            function show() {
+                if (menu == "small") {
+                    $('.nav').css('min-height','20.5em');
+                    $('.link').css('opacity','1');
+                    $('.link').css('display','inline-block');
+                    menu = "big";
+                } else {
+                    $('.link').css('opacity','0').delay(250);
+                    $('.link').css('display','none');
+                    $('.nav').css('min-height','3.5em');
+                    menu = "small";
+                }
+            }
+            /*
+            window.addEventListener("orientationchange", function() {
+                if(window.innerHeight < window.innerWidth){
+                    $('.link').css('opacity','1');
+                    $('.link').css('display','inline-block');
+                }
+            }, false);
+
+            $( window ).on( "orientationchange", function( event ) {
+                if ($(window).width() < $('.schedule').width()) {
+                    $('.sched').css('display','inline-block');
+                    $('.schedule').css('display','none');
+                }
+
+            });
+            */
+            // smooth scroll
+            var navbarHeight = $('.nav').height(); // assuming height remains constant
+            $('.link').click(function() {
+                var link = $(this);
+                $('html, body').animate({ scrollTop: $(link.attr('href')).offset().top - navbarHeight - 15});
+                return false;
+            });
+
+        </SCRIPT>
+    </BODY>
+</HTML>
