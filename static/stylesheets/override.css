@@ -67,7 +67,7 @@ a.symbol:before {
 	width: 0.3em;
 }
 ::-webkit-scrollbar-thumb{
-	background-color: #3498db;
+	background-color: #3498db; 
 }
 ::-webkit-scrollbar-track{
 	background-color: #ecf0f1;
@@ -150,7 +150,7 @@ body {
 	-o-transition:none 0.25s;
 	transition:none 0.25s;
 	/*text-shadow: 1px 1px #3498db, 2px 2px #3498db, 3px 3px #3498db, 4px 4px #3498db, 5px 5px #3498db, 6px 6px #3498db, 7px 7px #3498db, 8px 8px #3498db, 9px 9px #3498db, 10px 10px #3498db, 11px 11px #3498db, 12px 12px #3498db, 13px 13px #3498db, 14px 14px #3498db, 15px 15px #3498db, 16px 16px #3498db, 17px 17px #3498db, 18px 18px #3498db, 19px 19px #3498db, 20px 20px #3498db, 21px 21px #3498db, 22px 22px #3498db, 23px 23px #3498db, 24px 24px #3498db, 25px 25px #3498db, 26px 26px #3498db, 27px 27px #3498db, 28px 28px #3498db, 29px 29px #3498db, 30px 30px#3498db, 31px 31px #3498db, 32px 32px #3498db, 33px 33px #3498db, 34px 34px #3498db, 35px 35px #3498db, 36px 36px #3498db, 37px 37px #3498db, 38px 38px #3498db, 39px 39px #3498db, 40px 40px #3498db, 41px 41px #3498db, 42px 42px #3498db, 43px 43px #3498db, 44px 44px #3498db, 45px 45px #3498db, 46px 46px #3498db, 47px 47px #3498db, 48px 48px #3498db, 49px 49px #3498db, 50px 50px #3498db, 51px 51px #3498db, 52px 52px #3498db, 53px 53px #3498db, 54px 54px #3498db, 55px 55px #3498db, 56px 56px #3498db, 57px 57px #3498db, 58px 58px #3498db, 59px 59px #3498db,60px 60px #3498db, 61px 61px #3498db, 62px 62px #3498db, 63px 63px #3498db, 64px 64px #3498db, 65px 65px #3498db, 66px 66px #3498db, 67px 67px #3498db, 68px 68px #3498db, 69px 69px #3498db, 70px 70px #3498db, 71px 71px #3498db, 72px 72px #3498db, 73px 73px #3498db, 74px 74px #3498db, 75px 75px #3498db, 76px 76px #3498db, 77px 77px #3498db, 78px 78px #3498db, 79px 79px #3498db, 80px 80px #3498db, 81px 81px #3498db, 82px 82px #3498db, 83px 83px #3498db, 84px 84px #3498db, 85px 85px #3498db, 86px 86px #3498db, 87px 87px #3498db, 88px 88px #3498db, 89px 89px #3498db, 90px 90px #3498db, 91px 91px #3498db, 92px 92px #3498db, 93px 93px #3498db, 94px 94px #3498db, 95px 95px #3498db, 96px 96px #3498db, 97px 97px #3498db, 98px 98px #3498db, 99px 99px #3498db;
-
+	
 	text-shadow: 1px 1px #3498db, 2px 2px #3498db, 3px 3px #3498db, 4px 4px #3498db, 5px 5px #3498db, 6px 6px #3498db, 7px 7px #3498db;*/
 }
 #changeBase {
@@ -174,7 +174,7 @@ body {
 	position: fixed;
 	background: rgba(236, 240, 241, 0.96);
 	top: 0px;
-	width: 100%;
+	width: 100%;	
 	font-size: 1.25em;
 	z-index: 5;
 	border-bottom: solid 0.1em #3498db;
@@ -218,7 +218,7 @@ body {
 	font-family: 'Roboto-Light', 'Open Sans', sans-serif;
 	font-size: 1.25em;
 	max-width: 100%;
-	display: inline-block;
+	display: inline-block; 
 	color: #444;
 }
 .section .column {
@@ -350,7 +350,7 @@ no {
 .foot {
 	background-color: #3498db;
 	color: #FFFFFF;
-	font-family: 'Roboto-Regular', sans-serif;
+	font-family: 'Open Sans', sans-serif;
 	display: block;
 	text-align: center;
 	font-size: 1em;
