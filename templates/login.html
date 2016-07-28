@@ -1,21 +1,41 @@
 <html>
 
 <head>
-  <title>FooBar</title>
+        <META name="viewport" content="initial-scale=1">
+        <TITLE>
+            Login
+        </TITLE>
+        <LINK rel="icon" href="static/images/favicon.ico" type="image/x-icon" />
+        <!-- Embedding Google Fonts -->
+        <LINK href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400,300' rel='stylesheet' type='text/css' />
+        <!-- Embedding stylesheets -->
+        <LINK rel="stylesheet" href="static/stylesheets/normalize.css" />
+        <LINK rel="stylesheet" href="static/stylesheets/style.css" />
+        <LINK rel="stylesheet" href="static/stylesheets/override.css" />
+        <LINK rel="stylesheet" href="static/stylesheets/form.css" />
+        <LINK rel="stylesheet" href="static/stylesheets/hunt.css" />
+        <LINK rel="stylesheet" href="static/stylesheets/animate.css" />
+        <!-- Embedding scripts -->
+        <SCRIPT src="/static/scripts/wow.min.js"></SCRIPT>
+        <SCRIPT src="/static/scripts/header.js"></SCRIPT>
+        <!--<SCRIPT type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.js"></SCRIPT>-->
+        <SCRIPT src="/static/scripts/jquery-2.1.0.min.js"></SCRIPT>
 </head>
 
 <body>
-
-  <form action="{{url_for('login')}}" method="POST">
-    <input name="username" placeholder="username" type="text" />
-    <input name="password" type="password" />
-    <input type="submit" />
-  </form>
-
+	<div class="title">
+		Login
+	</div>
+	<form action="{{url_for('login')}}" method="POST">
+		<input name="username" placeholder="username" type="text" /><br/>
+		<input name="password" placeholder="password" type="password" /><br/>
+		<input type="submit"/>
+	</form>
+	<center>
   {% if error %}
-    <h4>Invalid Login. Try Again</h4>
+	<h4>Invalid Login. Try Again</h4>
   {%endif%}
-
+  </center>
 </body>
 
 </html>

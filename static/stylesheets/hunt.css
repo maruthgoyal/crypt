@@ -1,0 +1,11 @@
+input {
+	width: 30%;
+	display: inline-block;
+}
+.title {
+	margin: 5% 0;
+}
+body {
+	text-align: center;
+	font-family: "Roboto-Regular"
+}
