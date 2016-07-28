@@ -181,7 +181,7 @@ def play():
 
             else: # User submitted an answer
 
-                answer = str(request.form['ans']) # Get the answer
+                answer = request.form['ans'] # Get the answer
 
                 if eng.answerIsCorrect(answer, currentLevel, cookie, request.environ['REMOTE_ADDR']): # If the answer is correct
 
