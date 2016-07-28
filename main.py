@@ -78,6 +78,10 @@ def before_request():
 def index():
     return render_template("index.html")
 
+@app.route('/results')
+def results():
+    return render_template("results.html")
+
 
 @app.route(HUNT_PATH + '/rules')
 def rules():
