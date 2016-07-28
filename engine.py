@@ -296,13 +296,38 @@ class Engine(object):
 
         return self.userCollection.find_one({"_id":user_id})['team']
 
-    def answerIsCorrect(self, ans, lvl, user_id):
+    def answerIsCorrect(self, ans, lvl, user_id, ip):
 
         if lvl > -1:
-            ans = ans.lower().strip()
+
+            ans_original = ans
+            ans = ans.lower().replace(' ', '')
             check_ans = hashlib.sha512(ans + SALT).hexdigest()
 
-            return (check_ans == self.getAnswer(lvl))
+            if check_ans == self.getAnswer(lvl):
+
+                self.logAnswer(user_id=user_id,
+                              levelNo=lvl,
+                              ans=ans_original,
+                              valid=True,
+                              IP=ip) # Log the answer as correct
+
+                self.incrementLevel(user_id, lvl)
+                self.setLastAnswerTime(user_id, time.time())
+
+                return True
+
+            else:
+
+                self.logAnswer(user_id=user_id,
+                              levelNo=lvl,
+                              ans=ans_original,
+                              valid=False,
+                              IP=ip) # Log the answer as incorrect
+
+                return False
+
+
 
         else:
             self.setTeam(user_id, int(ans))

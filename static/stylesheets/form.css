@@ -28,20 +28,26 @@ form p {
     font-family: 'Roboto-Light', 'Open Sans', sans-serif;
 }
 input {
-	margin: 6px;
+	margin: 1em;
 	padding: 12px 15px;
 	width: 80%;
 	border: 0;
+	background-color: #ecf0f1;
+	border-bottom: 1px solid #aaa;
+	border-radius: 0;
+}
+input:focus, input:active {
+	outline: none;
+
 	border-bottom: 1px solid #3498db;
-	background: #fff;
 }
 input[type=submit] {
-	background: #fff;
+	background: #ecf0f1;
 	border: 2px solid #3498db;
 	font-weight: bold;
-	margin-top: 30px;
+	margin-top: 2em;
 }
 input[type=submit]:hover {
 	background: #3498db;
-	color: #fff;
+	color: #ecf0f1;
 }

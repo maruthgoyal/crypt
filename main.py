@@ -149,7 +149,6 @@ def play():
 
 
 
-
     if not eng.authenticate_secret(cookie, secret):
 
         resp = make_response(redirect(url_for('login')))
@@ -178,26 +177,11 @@ def play():
 
             else: # User submitted an answer
 
-                answer = str(request.form['ans']).lower().replace(' ', '') # Get the answer
+                answer = str(request.form['ans']) # Get the answer
 
-                if eng.answerIsCorrect(answer, currentLevel, cookie): # If the answer is correct
-
-                    eng.logAnswer(user_id=cookie,
-                                  levelNo=currentLevel,
-                                  ans=answer,
-                                  valid=True,
-                                  IP=request.environ['REMOTE_ADDR']) # Log the answer as correct
-
-                    eng.incrementLevel(cookie, currentLevel) # Increase the user's current level
-                    eng.setLastAnswerTime(cookie, time.time()) # Set the user's time for the last answer
+                if eng.answerIsCorrect(answer, currentLevel, cookie, request.environ['REMOTE_ADDR']): # If the answer is correct
 
                     return redirect(url_for('play')) # Reload the page
-
-                eng.logAnswer(user_id=cookie,
-                              levelNo=currentLevel,
-                              ans=answer,
-                              valid=False,
-                              IP=request.environ['REMOTE_ADDR']) # Log the answer as incorrect
 
                 return render_template('play.html', q=question, wrongAns=True) # Re-render the page, with wrong answer flag
 
