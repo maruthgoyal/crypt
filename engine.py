@@ -331,6 +331,8 @@ class Engine(object):
 
         else:
             self.setTeam(user_id, int(ans))
+            self.incrementLevel(user_id, lvl)
+            self.setLastAnswerTime(user_id, time.time())
             return True
 
 
