@@ -34,3 +34,5 @@ MYSTIC = 1
 INSTINCT = 2
 
 MONGO_URI = "mongodb://%s:%s@ds023315.mlab.com:23315/crypt"
+
+LVL_0_ANS = "QyVdoL1QUGbb9Ukd"
