@@ -63,13 +63,12 @@ def before_request():
     ''' Checking is a robot '''
 
     user_agent = request.user_agent
-    print request.headers
 
     if any(x==None for x in (user_agent.platform, user_agent.browser, user_agent.version)):
 
         abort(401)
 
-    if eng.isBlacklisted(request.remote_addr):
+    if eng.isBlacklisted(request.headers['X-Forwarded-For']):
 
         abort(403)
 
@@ -109,7 +108,7 @@ def login():
         uname = request.form['username']
         password = request.form['password']
 
-        ip = request.environ['REMOTE_ADDR'] # IP Address of the user. For logging and blacklist purposes
+        ip = request.headers['X-Forwarded-For'] # IP Address of the user. For logging and blacklist purposes
 
         if uname and password:
 
@@ -186,7 +185,7 @@ def play():
                 answer = request.form['ans'] # Get the answer
 
 
-                if eng.answerIsCorrect(answer, currentLevel, cookie, request.environ['REMOTE_ADDR']): # If the answer is correct
+                if eng.answerIsCorrect(answer, currentLevel, cookie, request.headers['X-Forwarded-For']): # If the answer is correct
 
                     return redirect(url_for('play')) # Reload the page
 
@@ -220,7 +219,7 @@ def logout():
 
     if USER_COOKIE_NAME in request.cookies:
 
-        eng.logout(request.cookies[USER_COOKIE_NAME], request.environ['REMOTE_ADDR']) # Logout the user. Sending the IP for logging purposes
+        eng.logout(request.cookies[USER_COOKIE_NAME], request.headers['X-Forwarded-For']) # Logout the user. Sending the IP for logging purposes
 
         resp = make_response(redirect(url_for('login'))) # Send to the index page.
         resp.set_cookie(USER_COOKIE_NAME, value='', expires=0) # Remove the cookie
@@ -269,7 +268,7 @@ def admin():
         adminUsername = request.form['username']
         adminPassword= request.form['password']
 
-        admin_ip = request.environ['REMOTE_ADDR']
+        admin_ip = request.headers['X-Forwarded-For']
 
         if adminUsername and adminPassword:
 
@@ -555,7 +554,7 @@ def adminLogout():
 
     if ADMIN_COOKIE_NAME in request.cookies:
 
-        eng.logoutAdmin(request.cookies[ADMIN_COOKIE_NAME], request.environ['REMOTE_ADDR'])
+        eng.logoutAdmin(request.cookies[ADMIN_COOKIE_NAME], request.headers['X-Forwarded-For'])
 
         resp =make_response(redirect(url_for("admin")))
         resp.set_cookie(ADMIN_COOKIE_NAME, '0',expires=0)
