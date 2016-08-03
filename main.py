@@ -63,6 +63,7 @@ def before_request():
     ''' Checking is a robot '''
 
     user_agent = request.user_agent
+    print request.headers
 
     if any(x==None for x in (user_agent.platform, user_agent.browser, user_agent.version)):
 
