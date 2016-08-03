@@ -308,7 +308,7 @@ class Engine(object):
 
                 self.logAnswer(user_id=user_id,
                               levelNo=lvl,
-                              ans=ans_original,
+                              ans=ans,
                               valid=True,
                               IP=ip) # Log the answer as correct
 
