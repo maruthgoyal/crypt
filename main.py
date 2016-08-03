@@ -4,7 +4,7 @@ import time
 from engine import Engine # Where all the magic happens
 
 from flask_limiter import Limiter  # For Rate limiting
-from flask_limiter.util import get_remote_address
+from flask_limiter.util import get_ipaddr
 
 from constants import VALOR, INSTINCT, MYSTIC, TIME_BONUS, LVL_0_ANS
 
@@ -21,7 +21,7 @@ HUNT_PATH = '/hunt'
 
 limiter = Limiter(
         app,
-        key_func=get_remote_address,
+        key_func=get_ipaddr,
         global_limits=['200/hour']
 
         ) # Initialize our rate limiter. Not more than 200 requests to the site/hour
