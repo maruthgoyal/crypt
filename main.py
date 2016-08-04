@@ -11,11 +11,11 @@ from constants import VALOR, INSTINCT, MYSTIC, TIME_BONUS, LVL_0_ANS
 app = Flask(__name__)
 eng = Engine() # Initialize our engine
 
-USER_COOKIE_NAME = "user"
-ADMIN_COOKIE_NAME = "admin"
+USER_COOKIE_NAME = "6pjwbEJwj4EzqhO"
+ADMIN_COOKIE_NAME = "BCBgy4rdoWqQmeB"
 
-USER_SECRET_NAME = "user_secret"
-ADMIN_SECRET_NAME = "admin_secret"
+USER_SECRET_NAME = "ENPlpC6GqGDj58u"
+ADMIN_SECRET_NAME = "FcBlb3WEKQWlyK3"
 
 HUNT_PATH = '/hunt'
 
@@ -252,7 +252,7 @@ def dead():
 ###### Admin Stuff ###########
 ##############################
 
-@app.route(HUNT_PATH + '/5/7/whoami/admin', methods=['POST', 'GET'])
+@app.route('/5/7/whoami/admin', methods=['POST', 'GET'])
 def admin():
 
     if request.method == 'GET':
@@ -284,7 +284,7 @@ def admin():
 
         return render_template("admin_login.html", error=True) # If either username or password is missing, or invalid login
 
-@app.route(HUNT_PATH + '/5/7/whoami/admin/dash')
+@app.route('/5/7/whoami/admin/dash')
 def admin_dash():
 
     if ADMIN_COOKIE_NAME not in request.cookies or ADMIN_SECRET_NAME not in request.cookies:
@@ -302,7 +302,7 @@ def admin_dash():
     return render_template("admin_dashboard.html")
 
 
-@app.route(HUNT_PATH + '/5/7/whoami/admin/add', methods=['POST', 'GET'])
+@app.route('/5/7/whoami/admin/add', methods=['POST', 'GET'])
 def add_user():
 
     if ADMIN_COOKIE_NAME not in request.cookies or ADMIN_SECRET_NAME not in request.cookies:
@@ -347,7 +347,7 @@ def add_user():
 
         return redirect(url_for('admin_dash'))
 
-@app.route(HUNT_PATH + '/5/7/whoami/admin/remove', methods=['POST', 'GET'])
+@app.route('/5/7/whoami/admin/remove', methods=['POST', 'GET'])
 def remove_user():
 
     if ADMIN_COOKIE_NAME not in request.cookies or ADMIN_SECRET_NAME not in request.cookies:
@@ -381,7 +381,7 @@ def remove_user():
 
         return redirect(url_for('admin_dash'))
 
-@app.route(HUNT_PATH + '/5/7/whoami/admin/dq', methods=['POST', 'GET'])
+@app.route('/5/7/whoami/admin/dq', methods=['POST', 'GET'])
 def dq_user():
 
     if ADMIN_COOKIE_NAME not in request.cookies or ADMIN_SECRET_NAME not in request.cookies:
@@ -413,7 +413,7 @@ def dq_user():
 
         return redirect(url_for('admin_dash'))
 
-@app.route(HUNT_PATH + '/5/7/whoami/admin/rq', methods=['POST', 'GET'])
+@app.route('/5/7/whoami/admin/rq', methods=['POST', 'GET'])
 def rq_user():
 
     if ADMIN_COOKIE_NAME not in request.cookies or ADMIN_SECRET_NAME not in request.cookies:
@@ -445,7 +445,7 @@ def rq_user():
 
         return redirect(url_for('admin_dash'))
 
-@app.route(HUNT_PATH + '/5/7/whoami/admin/chlvl', methods=['POST', 'GET'])
+@app.route('/5/7/whoami/admin/chlvl', methods=['POST', 'GET'])
 def chlvl():
 
     if ADMIN_COOKIE_NAME not in request.cookies or ADMIN_SECRET_NAME not in request.cookies:
@@ -479,7 +479,7 @@ def chlvl():
 
         return redirect(url_for('admin_dash'))
 
-@app.route(HUNT_PATH + '/5/7/whoami/admin/setStartTime', methods=['POST', 'GET'])
+@app.route('/5/7/whoami/admin/setStartTime', methods=['POST', 'GET'])
 def ch_start_time():
 
     if ADMIN_COOKIE_NAME not in request.cookies or ADMIN_SECRET_NAME not in request.cookies:
@@ -513,7 +513,7 @@ def ch_start_time():
         return redirect(url_for('admin_dash'))
 
 
-@app.route(HUNT_PATH + '/5/7/whoami/admin/setEndTime', methods=['POST', 'GET'])
+@app.route('/5/7/whoami/admin/setEndTime', methods=['POST', 'GET'])
 def ch_end_time():
 
     if ADMIN_COOKIE_NAME not in request.cookies or ADMIN_SECRET_NAME not in request.cookies:
@@ -546,7 +546,7 @@ def ch_end_time():
 
         return redirect(url_for('admin_dash'))
 
-@app.route(HUNT_PATH + '/5/7/whoami/admin/blacklistip', methods=['POST', 'GET'])
+@app.route('/5/7/whoami/admin/blacklistip', methods=['POST', 'GET'])
 def blacklist_ip():
 
     if ADMIN_COOKIE_NAME not in request.cookies or ADMIN_SECRET_NAME not in request.cookies:
@@ -582,7 +582,7 @@ def blacklist_ip():
 
 
 
-@app.route(HUNT_PATH + '/5/7/whoami/admin/logout')
+@app.route('/5/7/whoami/admin/logout')
 def adminLogout():
 
     if ADMIN_COOKIE_NAME in request.cookies:
@@ -610,7 +610,7 @@ def adminLogout():
 ###### Level Specific Stuff #######
 ####################################
 
-@app.route(HUNT_PATH + '/pwd')
+@app.route('/pwd')
 def lvl0pwd():
     return LVL_0_ANS
 
