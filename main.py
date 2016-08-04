@@ -546,6 +546,39 @@ def ch_end_time():
 
         return redirect(url_for('admin_dash'))
 
+@app.route(HUNT_PATH + '/5/7/whoami/admin/blacklistip', methods=['POST', 'GET'])
+def blacklist_ip():
+
+    if ADMIN_COOKIE_NAME not in request.cookies or ADMIN_SECRET_NAME not in request.cookies:
+        return redirect(url_for('admin'))
+
+
+    if not eng.authenticate_admin_secret(request.cookies[ADMIN_COOKIE_NAME], request.cookies[ADMIN_SECRET_NAME]):
+
+        resp = make_response(redirect(url_for("admin")))
+        resp.set_cookie(ADMIN_COOKIE_NAME, '', expires=0)
+        resp.set_cookies(ADMIN_SECRET_NAME, '', expires=0)
+
+        return resp
+
+    if request.method == 'GET':
+
+        return render_template("blacklist.html", error=False)
+
+    else:
+
+        ip = request.form['ip']
+        adminPass = request.form['adminPass']
+
+        if eng.checkAdminLogin(request.cookies[ADMIN_COOKIE_NAME], adminPass):
+
+            eng.blacklistIp(ip)
+
+        else:
+            return render_template("blacklist.html", error=True)
+
+        return redirect(url_for('admin_dash'))
+
 
 
 

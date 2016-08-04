@@ -80,6 +80,12 @@ class Engine(object):
 
         return False
 
+    def blacklistIp(self, ip):
+
+        if not self.miscCollection.find_one({"_id":ip}):
+
+            self.miscCollection.insert_one({"_id":ip})
+
     def getTimes(self):
 
         t = self.miscCollection.find_one({"_id":"times"})

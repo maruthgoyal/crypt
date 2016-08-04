@@ -1,0 +1,16 @@
+<HTML>
+  <HEAD>
+    <TITLE>Blacklist IP</TITLE>
+  </HEAD>
+  <BODY>
+    <form method="POST" action="{{url_for('blacklist_ip')}}">
+      IP to blacklist:
+      <input type="text" name="ip" />
+      <input type="password" name="adminPass" />
+      <input type="submit" />
+    </form>
+    {% if error %}
+      <H1>ERROR. Invalid Login. Try again</H1>
+    {%endif%}
+  </BODY>
+</HTML>
