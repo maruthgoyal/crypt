@@ -303,6 +303,7 @@ class Engine(object):
             ans_original = ans
             ans = ans.lower().replace(' ', '')
             check_ans = hashlib.sha512(ans + SALT).hexdigest()
+            print check_ans, self.getAnswer(lvl)
 
             if check_ans == self.getAnswer(lvl):
 
