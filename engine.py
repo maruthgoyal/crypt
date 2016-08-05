@@ -16,7 +16,7 @@ def comp(x, y):
 
     else:
 
-        return y[1] - x[1]
+        return int(y[1] - x[1])
 
 
 class Engine(object):
