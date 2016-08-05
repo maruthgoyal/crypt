@@ -21,6 +21,7 @@
         <TITLE> Leaderboard </TITLE>
 
         <script>
+        $(document).ready(function(){
         var table = document.createElement("table");
         var board = {{leaders | safe}};
         var x = null;
@@ -41,7 +42,9 @@
             x.style.background = "#FFFF00";
           }
         }
+        table.style.border = "none";
         document.body.appendChild(table);
+      })
         </script>
 
     </HEAD>
