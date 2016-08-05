@@ -249,11 +249,10 @@ class Engine(object):
     def getLeaderBoard(self):
 
         tempList = []
-        dic = {VALOR:"valor", MYSTIC:"mystic", INSTINCT:"instinct"}
 
         for user in self.userCollection.find({"disqualified":False}):
 
-            tempList.append((user['currentLevel'], user['lastLevelTime'], user['NAME'], dic[user['team']]))
+            tempList.append((user['currentLevel'], user['lastLevelTime'], user['NAME'], user['team']))
 
         tempList.sort(reverse=True, cmp=comp)
 
