@@ -8,6 +8,8 @@ from flask_limiter.util import get_ipaddr
 
 from constants import VALOR, INSTINCT, MYSTIC, TIME_BONUS, LVL_0_ANS
 
+# author: Maruth Goyal
+
 app = Flask(__name__)
 eng = Engine() # Initialize our engine
 
