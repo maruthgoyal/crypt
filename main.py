@@ -472,7 +472,7 @@ def chlvl():
 
         if eng.checkAdminLogin(request.cookies[ADMIN_COOKIE_NAME], adminPass):
 
-            eng.increment_level(uname, increment)
+            eng.increment_level(uname, int(increment))
 
         else:
             return render_template("chlevel.html", error=True)
