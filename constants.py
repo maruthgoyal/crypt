@@ -1,5 +1,3 @@
-MONGODB_SERVER = 'localhost'
-MONGODB_PORT = 27017
 MONGO_DB = "cryptic_hunt"
 
 USER_COLLECTION = "users"    # Contains the credentials of all the users
@@ -22,8 +20,8 @@ FROM_EMAIL_ID = "espicev13@gmail.com"
 EMAIL_USERNAME = "espicev13"
 EMAIL_PASSWORD = "thisisnoida"
 
-REGISTRATION_MSG = """ """
-SUBJECT_MSG = ''
+REGISTRATION_MSG = """Hello\nThank you for registering for eSpice v13. The following will be your login details for the online cryptic hunt to be held on August 13th 2016. We hope you enjoy the hunt.\n """
+SUBJECT_MSG = 'Registration for eSpice v13'
 
 SALT = "9808412005564c13bd85fa92356dd48d"
 

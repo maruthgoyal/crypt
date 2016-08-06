@@ -1,0 +1,168 @@
+<!DOCTYPE HTML>
+<HTML>
+    <HEAD>
+        <META name="viewport" content="initial-scale=1">
+        <TITLE>
+            eSpice v13.0
+        </TITLE>
+        <LINK rel="icon" href="static/images/favicon.ico" type="image/x-icon" />
+        <!-- Embedding Google Fonts -->
+        <LINK href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400,300' rel='stylesheet' type='text/css' />
+        <!-- Embedding stylesheets -->
+        <LINK rel="stylesheet" href="static/stylesheets/normalize.css" />
+        <LINK rel="stylesheet" href="static/stylesheets/style.css" />
+        <LINK rel="stylesheet" href="static/stylesheets/override.css" />
+        <LINK rel="stylesheet" href="static/stylesheets/form.css" />
+        <LINK rel="stylesheet" href="static/stylesheets/animate.css" />
+        <!-- Embedding scripts -->
+        <SCRIPT src="static/scripts/wow.min.js"></SCRIPT>
+        <SCRIPT src="static/scripts/header.js"></SCRIPT>
+        <!--<SCRIPT type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.js"></SCRIPT>-->
+        <SCRIPT src="static/scripts/jquery-2.1.0.min.js"></SCRIPT>
+    </HEAD>
+    <BODY>
+
+            <div class="hero">
+                <DIV class="row">
+                    <DIV class="row">
+                    <DIV class="column full">
+                        <IMG class="heroImg" src="static/images/logo.png" class="wow fadeInDown banner"/>
+                    </DIV>
+                <DIV class="row heroBtns">
+                    <BR/><BR/><BR/>
+                    <center>
+                        <BUTTON class="ghost push wow fadeInUp" href="" onclick="window.location.href = '#signup';" >
+                        Sign Up
+                        </BUTTON>
+                    </center>
+                </DIV>
+
+                </DIV>
+            </div>
+        </DIV>
+
+        <DIV class="container" style="width: 80%">
+            <DIV class="row section wow fadeInUp" id="signup">
+                <DIV class="column full title wow fadeInDown" id="">
+                    Sign Up
+                </DIV>
+
+                <form method="POST">
+                  {% if message %}
+                  <p>
+                    {{message}}
+                  </p>
+                  {%endif%}
+                    <div class="grp">
+                        <h1>School</h1>
+                        <input type="text" placeholder="school name" name="schName" required>
+                        <input type="email" placeholder="school mail" name="schMail" required>
+                        <input type="number" placeholder="school phone number" name="schPh" required>
+                    </div>
+
+                    <div class="grp">
+                        <h1>Teacher Incharge</h1>
+                        <input type="text" placeholder="name" name="teachInchName" required>
+                        <input type="email" placeholder="mail" name="teachInchMail" required>
+                        <input type="number" placeholder="phone number" name="teachInchPh" required>
+                    </div>
+
+                    <div class="grp">
+                        <h1>Student Incharge</h1>
+                        <input type="text" placeholder="name" name="studInchName" required>
+                        <input type="email" placeholder="mail" name="studInchMail" required>
+                        <input type="number" placeholder="phone number" name="studInchPh" required>
+                    </div>
+
+                    <div class="grp">
+                        <h1>Event Participants</h1>
+                        <h2>Turtle Wars</h2>
+                        <input type="text" placeholder="participant 1 name" name="turtle1" required>
+                        <input type="text" placeholder="participant 2 name" name="turtle2" required>
+
+                        <h2>Gaming</h2>
+                        <input type="text" placeholder="participant 1 name" name="gaming" required>
+
+                        <h2>Flash</h2>
+                        <input type="text" placeholder="participant 1 name" name="flash1" required>
+                        <input type="text" placeholder="participant 2 name" name="flash2" required>
+
+                        <h2>Surprise</h2>
+                        <input type="text" placeholder="participant 1 name" name="surprise" required>
+
+                        <h2>Music Mixing</h2>
+                        <input type="text" placeholder="participant 1 name" name="music1" required>
+                        <input type="text" placeholder="participant 2 name" name="music2" required>
+
+                        <h2>Snapography</h2>
+                        <input type="text" placeholder="participant 1 name" name="snap" required>
+
+                        <h2>GD</h2>
+                        <input type="text" placeholder="participant 1 name" name="gd" required>
+
+                        <h2>QuizCross</h2>
+                        <input type="text" placeholder="participant 1 name" name="quiz1" required>
+                        <input type="text" placeholder="participant 2 name" name="quiz2">
+
+                        <h2>Sr. Programming</h2>
+                        <input type="text" placeholder="participant 1 name" name="prog1" required>
+                        <input type="text" placeholder="participant 2 name" name="prog2" required>
+
+                        <h2>Design</h2>
+                        <input type="text" placeholder="participant 1 name" name="design1" required>
+                        <input type="text" placeholder="participant 2 name" name="design2" required>
+
+                        <h2>A/V</h2>
+                        <input type="text" placeholder="participant 1 name" name="av1" required>
+                        <input type="text" placeholder="participant 2 name" name="av2" required>
+                    </div>
+
+                        <input type="submit" id="sub">
+                </form>
+        </DIV>
+    </DIV>
+        <DIV class="wow fadeIn foot">
+            <BR />
+            Made with &hearts; in Noida.
+            <BR /><BR/>
+            Maruth Goyal&nbsp;&nbsp;|&nbsp;&nbsp;Parth Dhar&nbsp;&nbsp;|&nbsp;&nbsp;Prayas Kumar Singh
+        </DIV>
+    <script type="text/javascript">
+        var menu = "small";
+
+            $('.link').click(function () {
+                if(window.innerHeight > window.innerWidth){
+
+                    $('.link').css('opacity','0').delay(250);
+                    $('.link').css('display','none');
+                    $('.nav').css('min-height','3.5em');
+                    menu = "small";
+                    }
+                });
+
+            function show() {
+                if (menu == "small") {
+                    $('.nav').css('min-height','20.5em');
+                    $('.link').css('opacity','1');
+                    $('.link').css('display','inline-block');
+                    menu = "big";
+                } else {
+                    $('.link').css('opacity','0').delay(250);
+                    $('.link').css('display','none');
+                    $('.nav').css('min-height','3.5em');
+                    menu = "small";
+                }
+            }
+
+        var navbarHeight = $('.nav').height(); // assuming height remains constant
+            $('.link').click(function() {
+                var link = $(this);
+                $('html, body').animate({ scrollTop: $(link.attr('href')).offset().top - navbarHeight - 15});
+                return false;
+            });
+
+        </SCRIPT>
+
+    </script>
+
+</HTML>

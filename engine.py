@@ -27,8 +27,6 @@ class Engine(object):
 
         ''' Initialize all Database connections'''
 
-        #self.connection = pymongo.MongoClient(MONGODB_SERVER, MONGODB_PORT)
-        #self.connection["admin"].authenticate(USER, PASSWORD, mechanism="SCRAM-SHA-1")
         self.connection = pymongo.MongoClient(MONGO_URI % (USER, PASSWORD))
         db = self.connection[MONGO_DB]
 
