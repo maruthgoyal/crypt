@@ -13,8 +13,8 @@ ADMIN_COLLECTION = "admins"
 ADMIN_LOGIN_COLLECTION = "admin_logins"
 ADMIN_LOGOUT_COLLECTION = "admin_logouts"
 
-USER = "root"
-PASSWORD = "oR5VGlltFFiepyFi0FNtn8SWF7wYqH0og7ewHlQFrHcrdFP2O8xZ5MSimw8T9b6L"
+USER = "3JzDDTVnF1CG5TwN"
+PASSWORD = "85yQgB6NXP1F2OJqAQFHiWCAASmNN4SPqQO6WyAHQLMPsfB9lpWjzamlbO4BZJ6g"
 
 
 EMAIL_HOST = 'smtp.gmail.com:587'
@@ -33,6 +33,6 @@ VALOR = 0
 MYSTIC = 1
 INSTINCT = 2
 
-MONGO_URI = "mongodb://%s:%s@ds023315.mlab.com:23315/crypt"
+MONGO_URI = "mongodb://%s:%s@ds147835-a0.mlab.com:47835"
 
 LVL_0_ANS = "QyVdoL1QUGbb9Ukd"
