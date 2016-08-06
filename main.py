@@ -74,8 +74,6 @@ def before_request():
 
         abort(403)
 
-
-
 @app.route('/')
 def index():
     return render_template("index.html")
