@@ -1,6 +1,6 @@
 MONGODB_SERVER = 'localhost'
 MONGODB_PORT = 27017
-MONGO_DB = "crypt"
+MONGO_DB = "cryptic_hunt"
 
 USER_COLLECTION = "users"    # Contains the credentials of all the users
 QUESTIONS_COLLECTION = "qa"  # Contains all the questions and answers
@@ -33,6 +33,6 @@ VALOR = 0
 MYSTIC = 1
 INSTINCT = 2
 
-MONGO_URI = "mongodb://%s:%s@ds147835-a0.mlab.com:47835"
+MONGO_URI = "mongodb://%s:%s@ds147835-a0.mlab.com:47835/cryptic_hunt"
 
 LVL_0_ANS = "QyVdoL1QUGbb9Ukd"
