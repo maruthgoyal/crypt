@@ -59,6 +59,11 @@ def fourtwonine(e):
 
     return render_template("rate_limited.html"), 429
 
+@app.errorhandler(469)
+def foursixnine(e):
+
+    return render_template("ip_black.html"), 469
+
 @app.before_request  # Check if user is not a robot or blacklisted before every request
 def before_request():
 
@@ -72,7 +77,7 @@ def before_request():
 
     if eng.isBlacklisted(request.headers['X-Forwarded-For']):
 
-        abort(403)
+        abort(469)
 
 @app.route('/')
 def index():

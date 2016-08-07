@@ -31,6 +31,6 @@ VALOR = 0
 MYSTIC = 1
 INSTINCT = 2
 
-MONGO_URI = "mongodb://%s:%s@ds147835-a0.mlab.com:47835/cryptic_hunt"
+MONGO_URI = "mongodb://%s:%s@ds147835-a0.mlab.com:47835,ds147835-a1.mlab.com:47835/cryptic_hunt?replicaSet=rs-ds147835"
 
 LVL_0_ANS = "QyVdoL1QUGbb9Ukd"
