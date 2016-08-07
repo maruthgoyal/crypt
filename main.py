@@ -306,6 +306,8 @@ def add_user():
 
         return redirect(url_for('admin'))
 
+    print 1
+
     if request.method == 'GET':
 
         if not eng.authenticate_admin_secret(request.cookies[ADMIN_COOKIE_NAME], request.cookies[ADMIN_SECRET_NAME]):
@@ -320,6 +322,8 @@ def add_user():
 
     else:
 
+        print 2
+
         if not eng.authenticate_admin_secret(request.cookies[ADMIN_COOKIE_NAME], request.cookies[ADMIN_SECRET_NAME]):
 
             resp = make_response(redirect(url_for("admin")))
@@ -328,13 +332,19 @@ def add_user():
 
             return resp
 
+        print 3
+
         email = request.form['emailID']
         schoolName = request.form['name']
         username = request.form['username']
         password = request.form['password']
         adminPass = request.form['adminPass']
 
+        print 4
+
         if eng.checkAdminLogin(request.cookies[ADMIN_COOKIE_NAME], adminPass):
+
+            print 5
 
             eng.add_user(email, password, username, schoolName)
 
