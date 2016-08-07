@@ -59,11 +59,6 @@ def fourtwonine(e):
 
     return render_template("rate_limited.html"), 429
 
-@app.errorhandler(469)
-def foursixnine(e):
-
-    return render_template("ip_black.html"), 469
-
 @app.before_request  # Check if user is not a robot or blacklisted before every request
 def before_request():
 
@@ -77,7 +72,7 @@ def before_request():
 
     if eng.isBlacklisted(request.headers['X-Forwarded-For']):
 
-        abort(469)
+        abort(403)
 
 @app.route('/')
 def index():
@@ -96,9 +91,6 @@ def rules():
 @app.route(HUNT_PATH, methods=['POST', 'GET'])
 @limiter.limit("50/hour") # Not more than 50 visits to the main page per hour
 def login():
-
-    #print currentTime, start, end
-    # print request.access_route, request.environ['REMOTE_ADDR']
 
     if request.method == 'GET':
 
