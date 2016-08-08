@@ -305,7 +305,7 @@ def add_user():
     if ADMIN_COOKIE_NAME not in request.cookies or ADMIN_SECRET_NAME not in request.cookies:
 
         return redirect(url_for('admin'))
-        
+
     if request.method == 'GET':
 
         if not eng.authenticate_admin_secret(request.cookies[ADMIN_COOKIE_NAME], request.cookies[ADMIN_SECRET_NAME]):
@@ -611,5 +611,11 @@ def adminLogout():
 def lvl0pwd():
     return LVL_0_ANS
 
+
+####################################
+###### EASTER EGG  ################
+@app.route('/admin')
+def troll():
+    return redirect("https://www.youtube.com/watch?v=dQw4w9WgXcQ", code=302)
 if __name__ == '__main__':
     app.run(debug=True)
