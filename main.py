@@ -611,6 +611,10 @@ def adminLogout():
 def lvl0pwd():
     return LVL_0_ANS
 
+@app.route('/static/files/void.dat')
+def dat():
+    return send_from_directory('static', 'files/void.dat')
+
 
 ####################################
 ###### EASTER EGG  ################

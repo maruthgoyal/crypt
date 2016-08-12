@@ -9,3 +9,27 @@ body {
 	text-align: center;
 	font-family: "Roboto-Regular"
 }
+.team-image {
+	border:none;
+	display: inline-block;
+	width: 80%;
+	height: auto;
+}
+
+.team-desc {
+	display: inline-block;
+}
+.team-form {
+	max-width: 30%;
+	margin: 0;
+	display: inline-block;
+}
+table {
+
+	width: 90%;
+	margin-left: 5%;
+}
+.hint-img {
+	margin-top: 10%;
+	width: 30%;
+}
