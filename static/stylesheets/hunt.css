@@ -33,3 +33,18 @@ table {
 	margin-top: 10%;
 	width: 30%;
 }
+.hint-txt {
+	margin-top: 10%;
+}
+#rules {
+	display: inline-block;
+	text-align: left;
+	max-width: 80%;
+	font-size: 1.2em;
+}
+#rules h1 {
+	margin: 2em auto;
+}
+#rules li {
+	font-family: 'Open Sans';
+}
