@@ -1,0 +1,37 @@
+<html>
+	<head>
+	        <META name="viewport" content="initial-scale=1">
+	        <TITLE>Level 3</TITLE>
+	        <LINK rel="icon" href="/static/images/favicon.ico" type="image/x-icon" />
+	        <LINK href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400,300' rel='stylesheet' type='text/css' />
+	        <LINK rel="stylesheet" href="/static/stylesheets/normalize.css" />
+	        <LINK rel="stylesheet" href="/static/stylesheets/style.css" />
+	        <LINK rel="stylesheet" href="/static/stylesheets/override.css" />
+	        <LINK rel="stylesheet" href="/static/stylesheets/form.css" />
+	        <LINK rel="stylesheet" href="/static/stylesheets/hunt.css" />
+	        <LINK rel="stylesheet" href="/static/stylesheets/animate.css" />
+	        <SCRIPT src="/static/scripts/wow.min.js"></SCRIPT>
+	        <SCRIPT src="/static/scripts/header.js"></SCRIPT>
+	        <SCRIPT src="/static/scripts/jquery-2.1.0.min.js"></SCRIPT>
+	</head>
+	<body>
+		<DIV class="nav" id="bar">
+                <IMG src="/static/images/icon.png" align="left" class="menu" onclick="show()" />
+                <A class="link wow fadeInDown" href="/hunt/play">Play</A>
+                <A class="link wow fadeInDown" href="/hunt/leaderboard">Leaderboard</A>
+                <A class="link wow fadeInDown" href="/hunt/rules">Rules</A>
+                <A class="link wow fadeInDown" href="hunt/logout">Logout</A>
+                <A class="link wow fadeInDown" href="/">Home</A>
+           </DIV>
+		<br />
+		<center>
+		<img src="/static/images/vis.jpg" class="hint-img"/><br />
+		<h1>A song of ice, fire and ...</h1>
+		<form action="/hunt/play" method="POST">
+		<input type="text" name="ans" placeholder="answer" autofocus="on"/> <br />
+		<input type="submit" />
+		</form>
+		<!-- No Hanke Panky -->
+		</center>
+	</body>
+</html>
