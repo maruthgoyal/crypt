@@ -171,11 +171,11 @@ def play():
         else:
 
             currentLevel = eng.getLevel(cookie) # Get the current level
-            question = eng.getQuestion(currentLevel).replace('\\', '') # Get the question for that level
+            #question = eng.getQuestion(currentLevel).replace('\\', '') # Get the question for that level
 
             if request.method == 'GET': # show the question
 
-                return render_template('play.html', q=question, wrongAns=False)
+                return render_template('lvl%d.html' % currentLevel, wrongAns=False)
 
             else: # User submitted an answer
 
@@ -186,7 +186,7 @@ def play():
 
                     return redirect(url_for('play')) # Reload the page
 
-                return render_template('play.html', q=question, wrongAns=True) # Re-render the page, with wrong answer flag
+                return render_template('lvl%d.html' % currentLevel,wrongAns=True) # Re-render the page, with wrong answer flag
 
     elif currentTime > end:
 
