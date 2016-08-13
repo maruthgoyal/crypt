@@ -130,7 +130,7 @@ def login():
 
 
 
-@app.route(HUNT_PATH + '/play', methods=['POST', 'GET'])
+@app.route(HUNT_PATH + '/play', methods=['POST', 'GET', 'HEAD'])
 def play():
 
     start, end = eng.getTimes()
@@ -177,7 +177,7 @@ def play():
 
                 return render_template('lvl%d.html' % currentLevel, wrongAns=False)
 
-            else: # User submitted an answer
+            elif request.method == 'POST': # User submitted an answer
 
                 answer = request.form['ans'] # Get the answer
 
@@ -187,6 +187,9 @@ def play():
                     return redirect(url_for('play')) # Reload the page
 
                 return render_template('lvl%d.html' % currentLevel,wrongAns=True) # Re-render the page, with wrong answer flag
+
+            elif request.method == 'HEAD' and currentLevel == 6:
+                return "100000427771544"
 
     elif currentTime > end:
 
