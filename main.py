@@ -188,8 +188,6 @@ def play():
 
                 return render_template('lvl%d.html' % currentLevel,wrongAns=True) # Re-render the page, with wrong answer flag
 
-            elif request.method == 'HEAD' and currentLevel == 6:
-                return "100000427771544"
 
     elif currentTime > end:
 
