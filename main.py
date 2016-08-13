@@ -64,15 +64,17 @@ def before_request():
 
     ''' Checking is a robot '''
 
-    user_agent = request.user_agent
+    if request.method != "PUT":
 
-    if any(x==None for x in (user_agent.platform, user_agent.browser, user_agent.version)):
+        user_agent = request.user_agent
 
-        abort(401)
+        if any(x==None for x in (user_agent.platform, user_agent.browser, user_agent.version)):
 
-    if eng.isBlacklisted(request.headers['X-Forwarded-For']):
+            abort(401)
 
-        abort(403)
+        if eng.isBlacklisted(request.headers['X-Forwarded-For']):
+
+            abort(403)
 
 @app.route('/')
 def index():
