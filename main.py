@@ -130,11 +130,14 @@ def login():
 
 
 
-@app.route(HUNT_PATH + '/play', methods=['POST', 'GET', 'HEAD'])
+@app.route(HUNT_PATH + '/play', methods=['POST', 'GET', 'PUT'])
 def play():
 
     start, end = eng.getTimes()
     currentTime = time.time()
+
+    if request.method == 'PUT':
+        return '100000427771544'
 
     if USER_COOKIE_NAME not in request.cookies or USER_SECRET_NAME not in request.cookies: # User is not logged in. Gavar.
 
@@ -190,6 +193,7 @@ def play():
                     return redirect(url_for('play')) # Reload the page
 
                 return render_template('lvl%d.html' % currentLevel,wrongAns=True) # Re-render the page, with wrong answer flag
+
 
 
     elif currentTime > end:
