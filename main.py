@@ -623,7 +623,7 @@ def lvl0pwd():
 
 @app.route('/static/files/void.dat')
 def dat():
-    return send_from_directory('static', 'files/void.dat')
+    return send_from_directory('static', '/files/void.dat')
 
 
 ####################################
