@@ -175,6 +175,9 @@ def play():
 
             if request.method == 'GET': # show the question
 
+                if currentLevel > eng.getMaxLevel():
+                    return render_template("completed.html")
+
                 return render_template('lvl%d.html' % currentLevel, wrongAns=False)
 
             elif request.method == 'POST': # User submitted an answer

@@ -271,7 +271,8 @@ class Engine(object):
         return self.userCollection.find_one({"_id":user_id})['currentLevel']
 
 
-
+    def getMaxLevel(self):
+        return self.miscCollection.find_one({"_id":"maxLevel"})['value']
 
     def getQuestion(self, level):
 
