@@ -27,6 +27,8 @@ class Engine(object):
 
         ''' Initialize all Database connections'''
 
+        self.validChars = string.digits + string.letters
+
         self.connection = pymongo.MongoClient(MONGO_URI % (USER, PASSWORD))
         db = self.connection[MONGO_DB]
 
@@ -307,6 +309,9 @@ class Engine(object):
         return self.userCollection.find_one({"_id":user_id})['team']
 
     def answerIsCorrect(self, ans, lvl, user_id, ip):
+
+        if any(x not in self.validChars for x in ans):
+            return False
 
         if lvl > -1:
 
