@@ -629,6 +629,10 @@ def dat():
 def txt():
     return send_from_directory('static/files', 'boi.txt')
 
+@app.route('/hunt/xinocw.mp3')
+def mp3():
+    return send_from_directory('static/files', 'xinocw.mp3')
+
 ####################################
 ###### EASTER EGG  ################
 @app.route('/admin')
