@@ -1,4 +1,4 @@
-from flask import Flask, redirect, url_for, render_template,request, make_response, abort # Flask stuff
+from flask import Flask, redirect, url_for, render_template,request, make_response, abort, send_from_directory # Flask stuff
 
 import time
 from engine import Engine # Where all the magic happens
@@ -59,22 +59,22 @@ def fourtwonine(e):
 
     return render_template("rate_limited.html"), 429
 
-@app.before_request  # Check if user is not a robot or blacklisted before every request
-def before_request():
-
-    ''' Checking is a robot '''
-
-    if request.method != "PUT":
-
-        user_agent = request.user_agent
-
-        if any(x==None for x in (user_agent.platform, user_agent.browser, user_agent.version)):
-
-            abort(401)
-
-        if eng.isBlacklisted(request.headers['X-Forwarded-For']):
-
-            abort(403)
+# @app.before_request  # Check if user is not a robot or blacklisted before every request
+# def before_request():
+#
+#     ''' Checking is a robot '''
+#
+#     if request.method != "PUT":
+#
+#         user_agent = request.user_agent
+#
+#         if any(x==None for x in (user_agent.platform, user_agent.browser, user_agent.version)):
+#
+#             abort(401)
+#
+#         if eng.isBlacklisted(request.headers['X-Forwarded-For']):
+#
+#             abort(403)
 
 @app.route('/')
 def index():
@@ -623,7 +623,7 @@ def lvl0pwd():
 
 @app.route('/static/files/void.dat')
 def dat():
-    return send_from_directory('static', '/files/void.dat')
+    return send_from_directory('static/files', 'boi.dat')
 
 
 ####################################
