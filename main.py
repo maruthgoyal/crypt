@@ -1,4 +1,4 @@
-from flask import Flask, redirect, url_for, render_template,request, make_response, abort # Flask stuff
+from flask import Flask, redirect, url_for, render_template,request, make_response, abort, send_from_directory # Flask stuff
 
 import time
 from engine import Engine # Where all the magic happens
@@ -621,10 +621,13 @@ def adminLogout():
 def lvl0pwd():
     return LVL_0_ANS
 
-@app.route('/static/files/void.dat')
+@app.route('/hunt/boi.dat')
 def dat():
-    return send_from_directory('static', '/files/void.dat')
+    return send_from_directory('static/files', 'boi.dat')
 
+@app.route('/hunt/boi.txt')
+def txt():
+    return send_from_directory('static/files', 'boi.txt')
 
 ####################################
 ###### EASTER EGG  ################
