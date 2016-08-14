@@ -621,9 +621,13 @@ def adminLogout():
 def lvl0pwd():
     return LVL_0_ANS
 
-@app.route('/static/files/void.dat')
+@app.route('/hunt/boi.dat')
 def dat():
     return send_from_directory('static/files', 'boi.dat')
+
+@app.route('/hunt/boi.txt')
+def dat():
+    return send_from_directory('static/files', 'boi.txt')
 
 
 ####################################
