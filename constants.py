@@ -11,19 +11,19 @@ ADMIN_COLLECTION = "admins"
 ADMIN_LOGIN_COLLECTION = "admin_logins"
 ADMIN_LOGOUT_COLLECTION = "admin_logouts"
 
-USER = "3JzDDTVnF1CG5TwN"
-PASSWORD = "85yQgB6NXP1F2OJqAQFHiWCAASmNN4SPqQO6WyAHQLMPsfB9lpWjzamlbO4BZJ6g"
+USER = ""
+PASSWORD = ""
 
 
 EMAIL_HOST = 'smtp.gmail.com:587'
-FROM_EMAIL_ID = "espicev13@gmail.com"
-EMAIL_USERNAME = "espicev13"
-EMAIL_PASSWORD = "thisisnoida"
+FROM_EMAIL_ID = ""
+EMAIL_USERNAME = ""
+EMAIL_PASSWORD = ""
 
 REGISTRATION_MSG = """Hello\nThank you for registering for eSpice v13. The following will be your login details for the online cryptic hunt to be held on August 13th 2016. We hope you enjoy the hunt.\n """
 SUBJECT_MSG = 'Registration for eSpice v13'
 
-SALT = "9808412005564c13bd85fa92356dd48d"
+SALT = ""
 
 TIME_BONUS = (30 * 60) # 30 Minutes
 
@@ -31,6 +31,6 @@ VALOR = 0
 MYSTIC = 1
 INSTINCT = 2
 
-MONGO_URI = "mongodb://%s:%s@ds147835-a0.mlab.com:47835,ds147835-a1.mlab.com:47835/cryptic_hunt?replicaSet=rs-ds147835"
+MONGO_URI = ""
 
 LVL_0_ANS = "QyVdoL1QUGbb9Ukd"
